@@ -1,0 +1,4 @@
+# ignore all idea files and all tests
+
+.idea/
+tests/
