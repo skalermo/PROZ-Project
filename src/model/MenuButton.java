@@ -13,10 +13,10 @@ import java.io.FileNotFoundException;
 public class MenuButton extends Button {
 
     private final String FONT_PATH = "src/model/resources/some_font.ttf";
-    private final String BUTTON_PRESSED_STYLE = "-fx-background-color: rgba(0, 100, 50, 1)";
-    private final String BUTTON_RELEASED_STYLE = "-fx-background-color: rgba(0, 100, 50, 1)";
-    private final String BUTTON_ENTERED_STYLE = "-fx-background-color: rgba(0, 100, 50, 1)";
-    private final String BUTTON_EXITED_STYLE = "-fx-background-color: rgba(0, 100, 50, 0.5)";
+    private final String BUTTON_PRESSED_STYLE = "-fx-background-color: rgba(200, 200, 200, 1)";
+    private final String BUTTON_RELEASED_STYLE = "-fx-background-color: rgba(200, 200, 200, 1)";
+    private final String BUTTON_ENTERED_STYLE = "-fx-background-color: rgba(200, 200, 200, 1)";
+    private final String BUTTON_EXITED_STYLE = "-fx-background-color: rgba(200, 200, 200, 0.75)";
 
     public MenuButton(String text) {
         setText(text);
