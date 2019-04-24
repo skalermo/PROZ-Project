@@ -29,7 +29,7 @@ public class ViewManager {
     private static final int MENU_BUTTONS_START_Y = 150;
 
 
-    private MenuSubScene modeChoserSubScene;
+    private MenuSubScene modeChooserSubScene;
     private MenuSubScene helpSubScene;
     private MenuSubScene scoreSubScene;
     private MenuSubScene creditsSubScene;
@@ -38,7 +38,7 @@ public class ViewManager {
 
     List<MenuButton> startMenuButtons;
 
-    List<ModeChoser> modesList;
+    List<ModeChooser> modesList;
     private MODE chosenMode;
 
 
@@ -84,15 +84,15 @@ public class ViewManager {
 
     private void createModeChoserSubScene() {
 
-        modeChoserSubScene = new MenuSubScene();
-        mainPane.getChildren().add(modeChoserSubScene);
+        modeChooserSubScene = new MenuSubScene();
+        mainPane.getChildren().add(modeChooserSubScene);
 
         InfoLabel choseModeLabel = new InfoLabel("Chose the mode.");
         choseModeLabel.setLayoutX(170);
         choseModeLabel.setLayoutY(80);
-        modeChoserSubScene.getPane().getChildren().add(choseModeLabel);
-        modeChoserSubScene.getPane().getChildren().add(createModsToChose());
-        modeChoserSubScene.getPane().getChildren().add(createButtonToStart());
+        modeChooserSubScene.getPane().getChildren().add(choseModeLabel);
+        modeChooserSubScene.getPane().getChildren().add(createModsToChose());
+        modeChooserSubScene.getPane().getChildren().add(createButtonToStart());
     }
 
     private HBox createModsToChose() {
@@ -101,17 +101,17 @@ public class ViewManager {
         box.setSpacing(30);
         modesList = new ArrayList<>();
         for (MODE mode : MODE.values()) {
-            ModeChoser modeToChose = new ModeChoser(mode);
-            modesList.add(modeToChose);
-            box.getChildren().add(modeToChose);
-            modeToChose.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            ModeChooser modeToChoose = new ModeChooser(mode);
+            modesList.add(modeToChoose);
+            box.getChildren().add(modeToChoose);
+            modeToChoose.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent mouseEvent) {
-                    for (ModeChoser mode : modesList) {
+                    for (ModeChooser mode : modesList) {
                         mode.setIsCircleChosen(false);
                     }
-                    modeToChose.setIsCircleChosen(true);
-                    chosenMode = modeToChose.getMode();
+                    modeToChoose.setIsCircleChosen(true);
+                    chosenMode = modeToChoose.getMode();
                 }
             });
         }
@@ -158,7 +158,7 @@ public class ViewManager {
         newGameButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                showSubScene(modeChoserSubScene);
+                showSubScene(modeChooserSubScene);
             }
         });
     }

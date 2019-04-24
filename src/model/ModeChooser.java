@@ -7,7 +7,7 @@ import javafx.scene.layout.VBox;
 
 
 
-public class ModeChoser extends VBox {
+public class ModeChooser extends VBox {
 
     private ImageView circleImage;
     private ImageView modeImage;
@@ -19,7 +19,7 @@ public class ModeChoser extends VBox {
 
     private boolean isCircleChosen;
 
-    public ModeChoser(MODE mode) {
+    public ModeChooser(MODE mode) {
 
         circleImage = new ImageView(circleNotChosen);
         modeImage = new ImageView(mode.getUrlMode());
