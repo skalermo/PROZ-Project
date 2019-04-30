@@ -36,7 +36,7 @@ public class Hex {
         return new Hex(q + b.q, r + b.r, s + b.s);
     }
 
-    public  Hex subtract(Hex b) {
+    public Hex subtract(Hex b) {
         return new Hex(q - b.q, r - b.r, s - b.s);
     }
 
