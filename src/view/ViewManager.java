@@ -4,6 +4,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
@@ -52,6 +54,7 @@ public class ViewManager {
 
         createSubScenes();
         createButtons();
+        createKeyListeners();
         createBackground();
     }
 
@@ -79,10 +82,10 @@ public class ViewManager {
 
         mainPane.getChildren().addAll(scoreSubScene, helpSubScene, creditsSubScene);
 
-        createModeChoserSubScene();
+        createModeChooserSubScene();
     }
 
-    private void createModeChoserSubScene() {
+    private void createModeChooserSubScene() {
 
         modeChooserSubScene = new MenuSubScene();
         mainPane.getChildren().add(modeChooserSubScene);
@@ -91,11 +94,11 @@ public class ViewManager {
         choseModeLabel.setLayoutX(170);
         choseModeLabel.setLayoutY(80);
         modeChooserSubScene.getPane().getChildren().add(choseModeLabel);
-        modeChooserSubScene.getPane().getChildren().add(createModsToChose());
+        modeChooserSubScene.getPane().getChildren().add(createModsToChoose());
         modeChooserSubScene.getPane().getChildren().add(createButtonToStart());
     }
 
-    private HBox createModsToChose() {
+    private HBox createModsToChoose() {
 
         HBox box = new HBox();
         box.setSpacing(30);
@@ -125,6 +128,17 @@ public class ViewManager {
         MenuButton startButton = new MenuButton("Start.");
         startButton.setLayoutX(350);
         startButton.setLayoutY(380);
+
+        startButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                if (chosenMode != null){
+                    GameViewManager gameManager = new GameViewManager();
+                    gameManager.createNewGame(mainStage, chosenMode);
+                }
+            }
+        });
+
         return startButton;
     }
 
@@ -214,7 +228,17 @@ public class ViewManager {
             }
         });
 
+    }
 
+    private void createKeyListeners(){
+
+        startMenuScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent keyEvent) {
+                if (keyEvent.getCode() == KeyCode.ESCAPE)
+                    mainStage.close();
+            }
+        });
     }
 
     private void createBackground() {
