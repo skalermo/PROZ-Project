@@ -2,7 +2,7 @@ package engine;
 
 import java.util.ArrayList;
 
-class Layout
+public class Layout
 {
     public final Orientation orientation;
     public final Point size;

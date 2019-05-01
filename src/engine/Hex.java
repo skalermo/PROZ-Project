@@ -32,6 +32,13 @@ public class Hex {
         new IllegalArgumentException("q+r+s must be 0");
     }
 
+    public Hex(int q, int r)
+    {
+        this.q = q;
+        this.r = r;
+        this.s = -q-r;
+    }
+
     public Hex add(Hex b) {
         return new Hex(q + b.q, r + b.r, s + b.s);
     }
