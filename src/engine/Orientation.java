@@ -1,6 +1,6 @@
 package engine;
 
-public class Orientation {
+class Orientation {
 
     public final double f0;
     public final double f1;
@@ -14,7 +14,7 @@ public class Orientation {
 
     public final double start_angle;
 
-    public Orientation(double f0, double f1, double f2, double f3, double b0, double b1, double b2, double b3, double start_angle)
+    Orientation(double f0, double f1, double f2, double f3, double b0, double b1, double b2, double b3, double start_angle)
     {
         this.f0 = f0;
         this.f1 = f1;
