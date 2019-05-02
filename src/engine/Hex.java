@@ -23,6 +23,7 @@ public class Hex {
         return Hex.directions.get(direction);
     }
 
+
     public Hex(int q, int r, int s)
     {
         this.q = q;
