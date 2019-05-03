@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Tile extends Hex{
 
-    private boolean isAccessible;
+    private boolean isAccessible = false;
 
     private boolean isSelected = false;
 

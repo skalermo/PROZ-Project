@@ -89,14 +89,17 @@ public class Map {
         switch (biom){
             case 0:
                 tile.setType("tileGrass");
+                tile.setAccess(true);
                 break;
 
             case 1:
                 tile.setType("tileWater");
+
                 break;
 
             case 2:
                 tile.setType("tileSnow");
+                tile.setAccess(true);
                 break;
         }
     }

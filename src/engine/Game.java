@@ -108,42 +108,45 @@ public class Game {
         return imageViews;
     }
 
-//    public void select(double x, double y) {
-//        if (selection == null)
-//            return;
-//        Layout layout1 = new Layout(Layout.pointy, new Point(37.53, 31.5), new Point(-0, -0));
-//        Tile selectedTile = new Tile(layout1.pixelToHex(new Point(x, y)).hexRound());
-//        Point p = layout.hexToPixel(selectedTile);
-//
+    public void select(double x, double y) {
+        if (selection == null)
+            return;
+        Layout layout1 = new Layout(Layout.pointy, new Point(37.53, 31.5), new Point(-0, -0));
+        Tile selectedTile = new Tile(layout1.pixelToHex(new Point(x, y)).hexRound());
+        Point p = layout.hexToPixel(selectedTile);
+
 //        if (selectedTile.r >= 0 && selectedTile.r < 30 && selectedTile.q >= 0 && selectedTile.q < 21 && map.getMap()[selectedTile.r][selectedTile.q] != null){
 //            map.getMap()[selectedTile.r][selectedTile.q].setType("empty");
 //            imageViews[selectedTile.r][selectedTile.q].setImage(provider.getImage("emtpy"));
 //        }
-//
-//        selection.setLayoutX(p.x);
-//        selection.setLayoutY(p.y);
-//    }
-//
-//    public void click(double x, double y) {
-//        Layout layout1 = new Layout(Layout.pointy, new Point(37.53, 31.5), new Point(-0, -0));
-//        Hex selectedTile = layout1.pixelToHex(new Point(x, y)).hexRound();
-//        if (isAccessible(selectedTile) && chara.getH().distance(selectedTile) == 1)
-//        {
-//            chara.setH(selectedTile);
-//            Point p = layout.hexToPixel(selectedTile);
-//            chara.getImageView().setLayoutX(p.x+15);
-//            chara.getImageView().setLayoutY(p.y-10);
-//        }
-//
-//    }
-//
-//    private boolean isAccessible(Hex h){
-//
-//        if (h.r >= 0 && h.r < Map.SCR_TILEWIDTH && h.q >= 0 && h.q < Map.SCR_TILEHEIGHT && map.getMap()[h.r][h.q] != null){
-//            return map.getMap()[h.r][h.q].isAccessible();
-//        }
-//        return false;
-//    }
+
+        selection.setLayoutX(p.x);
+        selection.setLayoutY(p.y);
+    }
+
+    public void click(double x, double y) {
+        Layout layout1 = new Layout(Layout.pointy, new Point(37.53, 31.5), new Point(-0, -0));
+        Hex selectedTile = layout1.pixelToHex(new Point(x, y)).hexRound();
+        if (isAccessible(selectedTile) && chara.getH().distance(selectedTile) < 3)
+        {
+            chara.setH(selectedTile);
+            Point p = layout.hexToPixel(selectedTile);
+            chara.getImageView().setLayoutX(p.x+15);
+            chara.getImageView().setLayoutY(p.y-10);
+        }
+
+    }
+
+    private boolean isAccessible(Hex h){
+
+        return between(h.r, 0, Map.SCR_TILEWIDTH) &&
+                between(h.q, 0, Map.SCR_TILEHEIGHT) &&
+            tiles.get(h.r).get(h.q).isAccessible();
+    }
+
+    private boolean between(int v, int lb, int hb){
+        return lb <= v && v < hb;
+    }
 
 
 }

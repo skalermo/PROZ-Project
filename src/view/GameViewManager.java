@@ -179,8 +179,7 @@ public class GameViewManager {
         gameScene.setOnMouseMoved(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-               // log.info(mouseEvent.getX() + " " + mouseEvent.getY());
-//                game.select(mouseEvent.getSceneX(), mouseEvent.getSceneY());
+                game.select(mouseEvent.getSceneX(), mouseEvent.getSceneY());
             }
         });
 
@@ -189,8 +188,7 @@ public class GameViewManager {
         gameScene.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-
-//                game.click(mouseEvent.getSceneX(), mouseEvent.getSceneY());
+                game.click(mouseEvent.getSceneX(), mouseEvent.getSceneY());
             }
         });
 
