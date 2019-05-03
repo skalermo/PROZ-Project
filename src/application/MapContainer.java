@@ -1,19 +1,20 @@
 package application;
 
 import engine.Game;
-import engine.Map;
+import engine.Tile;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class MapContainer implements Serializable {
 
-    private Map map;
+    private List<List<Tile>> tiles;
 
     public MapContainer(Game game){
-        this.map = game.getMap();
+        this.tiles = game.getTiles();
     }
 
-    public Map getMap() {
-        return map;
+    public List<List<Tile>> getTiles() {
+        return tiles;
     }
 }

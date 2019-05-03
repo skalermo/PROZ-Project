@@ -5,65 +5,79 @@ import model.MODE;
 import view.ImageProvider;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Game {
 
-    private Map map;
     private Character chara;
     private ImageProvider provider;
     private Layout layout;
     private Tile lastSelectedTile;
     private ImageView selection;
-    private ImageView[][] imageViews;
+    private List<List<ImageView>> imageViews;
+    private List<List<Tile>> tiles;
 
     public Game(ImageProvider provider, MODE chosenMode){
+
         this.provider = provider;
-        imageViews = new ImageView[Map.SCR_TILEWIDTH][Map.SCR_TILEHEIGHT];
+        init2dArrays();
         layout = new Layout(Layout.pointy, new Point(37.53, 31.5), new Point(-32, -32)); //37, 32
-//        map = new Map(MapShape.PARALLELOGRAM, 1, 4, 2, 7);
-        map = new Map(MapShape.HEXAGON, 10);
+        Map.createMap(tiles, imageViews, MapShape.HEXAGON);
 
-//        map = new Map(MapShape.RECTANGLE, 16, 10);
-        chara = new Character();
-        map.randomizeMap();
+//        map.randomizeMap();
         createImageViews();
-
-
+        chara = new Character();
         lastSelectedTile = null;
         selection = null;
     }
 
-    public Map getMap(){
-        return map;
+    private void init2dArrays(){
+        imageViews = new ArrayList<>(Map.SCR_TILEWIDTH);
+        for (int i = 0; i < Map.SCR_TILEWIDTH; i++){
+            imageViews.add(new ArrayList<>(Map.SCR_TILEHEIGHT));
+            for (int j = 0; j < Map.SCR_TILEHEIGHT; j++)
+                imageViews.get(i).add(j, null);
+        }
+        tiles = new ArrayList<>(Map.SCR_TILEWIDTH);
+        for (int i = 0; i < Map.SCR_TILEWIDTH; i++){
+            tiles.add(new ArrayList<>(Map.SCR_TILEHEIGHT));
+            for (int j = 0; j < Map.SCR_TILEHEIGHT; j++)
+                tiles.get(i).add(j, new Tile(j, i));
+        }
     }
 
-    public void setMap(Map map) {
-        this.map = map;
-        refreshImageViews(map);
+    public List<List<Tile>> getTiles() {
+        return tiles;
     }
 
-    private void refreshImageViews(Map map) {
-        for (Tile[] tt: map.getMap())
-            for (Tile t: tt){
-                if (t != null)
-                    imageViews[t.r][t.q].setImage(provider.getImage(t.getType()));
-            }
-    }
-
-    public ImageView[][] getTilesImageViews() {
+    public List<List<ImageView>> getImageViews() {
 
         return imageViews;
     }
 
+    public void setTiles(List<List<Tile>> tiles) {
+        this.tiles = tiles;
+        refreshImageViews(tiles);
+    }
+
+    private void refreshImageViews(List<List<Tile>> tiles) {
+        for (int i = 0; i < tiles.size(); i++){
+            for (int j = 0; j < tiles.get(i).size(); j++){
+                if (imageViews.get(i).get(j) != null && tiles.get(i).get(j) != null)
+                imageViews.get(i).get(j).setImage(provider.getImage(tiles.get(i).get(j).getType()));
+            }
+        }
+
+    }
+
     private void createImageViews(){
 
-        for (Tile[] tt: map.getMap())
-            for (Tile t: tt)
-            {
-                if (t == null)
-                    continue;
-                imageViews[t.r][t.q] = createImageView(t);
+        for (int i = 0; i < tiles.size(); i++){
+            for (int j = 0; j < tiles.get(i).size(); j++){
+                if (tiles.get(i).get(j) != null)
+                    imageViews.get(i).set(j, createImageView(tiles.get(i).get(j)));
             }
+        }
     }
 
     private ImageView createImageView(Tile t) {
@@ -94,40 +108,42 @@ public class Game {
         return imageViews;
     }
 
-    public void select(double x, double y) {
-        if (selection == null)
-            return;
-        Layout layout1 = new Layout(Layout.pointy, new Point(37.53, 31.5), new Point(-0, -0));
-        Tile selectedTile = new Tile(layout1.pixelToHex(new Point(x, y)).hexRound());
-        Point p = layout.hexToPixel(selectedTile);
+//    public void select(double x, double y) {
+//        if (selection == null)
+//            return;
+//        Layout layout1 = new Layout(Layout.pointy, new Point(37.53, 31.5), new Point(-0, -0));
+//        Tile selectedTile = new Tile(layout1.pixelToHex(new Point(x, y)).hexRound());
+//        Point p = layout.hexToPixel(selectedTile);
+//
+//        if (selectedTile.r >= 0 && selectedTile.r < 30 && selectedTile.q >= 0 && selectedTile.q < 21 && map.getMap()[selectedTile.r][selectedTile.q] != null){
+//            map.getMap()[selectedTile.r][selectedTile.q].setType("empty");
+//            imageViews[selectedTile.r][selectedTile.q].setImage(provider.getImage("emtpy"));
+//        }
+//
+//        selection.setLayoutX(p.x);
+//        selection.setLayoutY(p.y);
+//    }
+//
+//    public void click(double x, double y) {
+//        Layout layout1 = new Layout(Layout.pointy, new Point(37.53, 31.5), new Point(-0, -0));
+//        Hex selectedTile = layout1.pixelToHex(new Point(x, y)).hexRound();
+//        if (isAccessible(selectedTile) && chara.getH().distance(selectedTile) == 1)
+//        {
+//            chara.setH(selectedTile);
+//            Point p = layout.hexToPixel(selectedTile);
+//            chara.getImageView().setLayoutX(p.x+15);
+//            chara.getImageView().setLayoutY(p.y-10);
+//        }
+//
+//    }
+//
+//    private boolean isAccessible(Hex h){
+//
+//        if (h.r >= 0 && h.r < Map.SCR_TILEWIDTH && h.q >= 0 && h.q < Map.SCR_TILEHEIGHT && map.getMap()[h.r][h.q] != null){
+//            return map.getMap()[h.r][h.q].isAccessible();
+//        }
+//        return false;
+//    }
 
-        if (selectedTile.r >= 0 && selectedTile.r < 30 && selectedTile.q >= 0 && selectedTile.q < 21 && map.getMap()[selectedTile.r][selectedTile.q] != null){
-            map.getMap()[selectedTile.r][selectedTile.q].setType("empty");
-            imageViews[selectedTile.r][selectedTile.q].setImage(provider.getImage("emtpy"));
-        }
 
-        selection.setLayoutX(p.x);
-        selection.setLayoutY(p.y);
-    }
-
-    public void click(double x, double y) {
-        Layout layout1 = new Layout(Layout.pointy, new Point(37.53, 31.5), new Point(-0, -0));
-        Hex selectedTile = layout1.pixelToHex(new Point(x, y)).hexRound();
-        if (isAccessible(selectedTile) && chara.getH().distance(selectedTile) == 1)
-        {
-            chara.setH(selectedTile);
-            Point p = layout.hexToPixel(selectedTile);
-            chara.getImageView().setLayoutX(p.x+15);
-            chara.getImageView().setLayoutY(p.y-10);
-        }
-
-    }
-
-    private boolean isAccessible(Hex h){
-
-        if (h.r >= 0 && h.r < Map.SCR_TILEWIDTH && h.q >= 0 && h.q < Map.SCR_TILEHEIGHT && map.getMap()[h.r][h.q] != null){
-            return map.getMap()[h.r][h.q].isAccessible();
-        }
-        return false;
-    }
 }

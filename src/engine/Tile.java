@@ -8,7 +8,7 @@ public class Tile extends Hex{
 
     private boolean isSelected = false;
 
-    private String type = "tileGrass";
+    private String type = "empty";
 
     private int heightOfTile = 1;
 

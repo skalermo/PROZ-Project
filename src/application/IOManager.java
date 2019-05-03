@@ -18,10 +18,8 @@ public class IOManager {
 
     public void saveMap(Game game) {
         MapContainer container = new MapContainer(game);
-        File f = null;
         try {
-            f = new File("src/application/savedMaps");
-            f.mkdir();
+            new File("src/application/savedMaps").mkdir();
 
             FileOutputStream fos = new FileOutputStream("src/application/savedMaps/map.jpm");
             ObjectOutputStream oos = new ObjectOutputStream(fos);
@@ -40,7 +38,7 @@ public class IOManager {
             ObjectInputStream ois = new ObjectInputStream(fis);
             MapContainer container = (MapContainer) ois.readObject();
             ois.close();
-            game.setMap(container.getMap());
+            game.setTiles(container.getTiles());
 
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();

@@ -2,13 +2,14 @@ package engine;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Hex implements Serializable {
     public final int q;
     public final int r;
     public final int s;
 
-    static public ArrayList<Hex> directions = new ArrayList<Hex>(){
+    static public List<Hex> directions = new ArrayList<Hex>(){
         {
             add(new Hex(1, 0, -1));
             add(new Hex(1, -1, 0));
@@ -79,7 +80,7 @@ public class Hex implements Serializable {
         return add(Hex.direction(direction));
     }
 
-    static public ArrayList<Hex> diagonals = new ArrayList<Hex>(){
+    static public List<Hex> diagonals = new ArrayList<Hex>(){
         {
             add(new Hex(2,-1, -1));
             add(new Hex(1, -2, 1));

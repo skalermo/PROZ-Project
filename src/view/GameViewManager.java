@@ -20,10 +20,10 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class GameViewManager {
-
     private AnchorPane gamePane;
     private Scene gameScene;
     private Stage gameStage;
@@ -41,7 +41,7 @@ public class GameViewManager {
 
     private GameMenuSubScene optionsSubScene;
     private GameMenuSubScene sceneToHide;
-    private ArrayList<MenuButton> optionsButtons;
+    private List<MenuButton> optionsButtons;
 
     private AnimationTimer gameTimer;
 
@@ -180,7 +180,7 @@ public class GameViewManager {
             @Override
             public void handle(MouseEvent mouseEvent) {
                // log.info(mouseEvent.getX() + " " + mouseEvent.getY());
-                game.select(mouseEvent.getSceneX(), mouseEvent.getSceneY());
+//                game.select(mouseEvent.getSceneX(), mouseEvent.getSceneY());
             }
         });
 
@@ -190,7 +190,7 @@ public class GameViewManager {
             @Override
             public void handle(MouseEvent mouseEvent) {
 
-                game.click(mouseEvent.getSceneX(), mouseEvent.getSceneY());
+//                game.click(mouseEvent.getSceneX(), mouseEvent.getSceneY());
             }
         });
 
@@ -210,18 +210,22 @@ public class GameViewManager {
     void createNewGame(Stage menuStage, MODE chosenMode){
         this.menuStage = menuStage;
         this.menuStage.hide();
+
         ImageProvider provider = ImageProvider.getInstance();
         ioManager = new IOManager(chosenMode == MODE.NORMAL ? game : null);
 
         if (chosenMode == MODE.NORMAL) {
+
             game = new Game(provider, chosenMode);
             addAllImageViews(game);
+
             gamePane.getChildren().add(game.getSelectedTile());
             gamePane.getChildren().addAll(game.getCharactersImageViews());
             createOptionsSubScene();
+
         } else if (chosenMode == MODE.MAP_CREATOR) {
 
-        } else throw new IllegalArgumentException("Illegal mode passed");
+        }
 
 
         createGameLoop();
@@ -229,10 +233,10 @@ public class GameViewManager {
     }
 
     private void addAllImageViews(Game game){
-        for (ImageView[] iv: game.getTilesImageViews())
-            for (ImageView i: iv)
-                if (i != null)
-                    gamePane.getChildren().add(i);
+        for (List<ImageView> imageViews: game.getImageViews())
+            for (ImageView imageView: imageViews)
+                if (imageView != null)
+                    gamePane.getChildren().add(imageView);
     }
 
     private void createGameLoop(){
