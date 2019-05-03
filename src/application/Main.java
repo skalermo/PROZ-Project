@@ -12,9 +12,9 @@ public class Main extends Application {
         primaryStage = manager.getMainStage();
 
         primaryStage.show();
-        primaryStage.setResizable(false);
-        primaryStage.setWidth(1024);
-        primaryStage.setHeight(768);
+        //primaryStage.setResizable(false);
+//        primaryStage.setWidth(1024);
+//        primaryStage.setHeight(768);
     }
 
     public static void main(String[] args) {
