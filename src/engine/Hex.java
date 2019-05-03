@@ -1,8 +1,9 @@
 package engine;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Hex {
+public class Hex implements Serializable {
     public final int q;
     public final int r;
     public final int s;

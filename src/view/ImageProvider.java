@@ -29,6 +29,7 @@ public class ImageProvider {
         images.put("bushMagic", new Image("/view/resources/Tiles/bushMagic.png", 15, 20, false, true));
         images.put("bushSand", new Image("/view/resources/Tiles/bushSand.png", 15, 20, false, true));
         images.put("bushSnow", new Image("/view/resources/Tiles/bushSnow.png", 15, 20, false, true));
+        images.put("empty", new Image("/view/resources/Tiles/empty.png", 65, 89, false, true));
         images.put("flowerBlue", new Image("/view/resources/Tiles/flowerBlue.png", 12, 11, false, true));
         images.put("flowerGreen", new Image("/view/resources/Tiles/flowerGreen.png", 12, 11, false, true));
         images.put("flowerRed", new Image("/view/resources/Tiles/flowerRed.png", 12, 11, false, true));

@@ -1,7 +1,9 @@
 package view;
 
-import engine.*;
+import application.IOManager;
+import engine.Game;
 import javafx.animation.AnimationTimer;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
@@ -10,9 +12,14 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import model.GameMenuSubScene;
+import model.InfoLabel;
 import model.MODE;
+import model.MenuButton;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+
+import java.util.ArrayList;
 
 
 public class GameViewManager {
@@ -20,12 +27,21 @@ public class GameViewManager {
     private AnchorPane gamePane;
     private Scene gameScene;
     private Stage gameStage;
+    private IOManager ioManager;
 
-    private static final int GAME_WIDTH = 1920;
-    private static final int GAME_HEIGHT = 1080;
+    private static final int GAME_SCR_WIDTH = 1920;
+    private static final int GAME_SCR_HEIGHT = 1080;
+
+    private static final int OPTIONS_BUTTONS_START_X = 255;
+    private static final int OPTIONS_BUTTONS_START_Y = 113;
+
     private Stage menuStage;
     private Game game;
     private ImageView mode;
+
+    private GameMenuSubScene optionsSubScene;
+    private GameMenuSubScene sceneToHide;
+    private ArrayList<MenuButton> optionsButtons;
 
     private AnimationTimer gameTimer;
 
@@ -33,10 +49,114 @@ public class GameViewManager {
 
     public GameViewManager(){
 
+        optionsButtons = new ArrayList<>();
         initializeStage();
         createKeyListeners();
         createMouseListeners();
+        createButtons();
+
     }
+
+    private void showSubScene(GameMenuSubScene subScene) {
+
+        if (subScene.equals(sceneToHide)) {
+            subScene.moveSubScene();
+            sceneToHide = null;
+            return;
+        }
+
+        subScene.moveSubScene();
+        sceneToHide = subScene;
+    }
+
+    private void createOptionsSubScene() {
+
+        optionsSubScene = new GameMenuSubScene();
+        gamePane.getChildren().add(optionsSubScene);
+
+        InfoLabel choseModeLabel = new InfoLabel("Options");
+        choseModeLabel.setLayoutX(1000);
+        choseModeLabel.setLayoutY(300);
+        optionsSubScene.getPane().getChildren().add(choseModeLabel);
+        optionsSubScene.getPane().getChildren().addAll(optionsButtons);
+    }
+
+    private void createButtons() {
+
+        createBackButton();
+        createSaveMapButton();
+        createLoadMapButton();
+        createExitButton();
+    }
+
+
+
+    private void createBackButton() {
+
+        MenuButton backButton = new MenuButton("Main menu");
+        backButton.setLayoutX(OPTIONS_BUTTONS_START_X);
+        backButton.setLayoutY(OPTIONS_BUTTONS_START_Y + optionsButtons.size() * 75);
+        optionsButtons.add(backButton);
+
+        backButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                gameStage.hide();
+                menuStage.show();
+                gameStage.close();
+            }
+        });
+
+    }
+
+    private void createSaveMapButton() {
+
+        MenuButton saveMapButton = new MenuButton("Save");
+        saveMapButton.setLayoutX(OPTIONS_BUTTONS_START_X);
+        saveMapButton.setLayoutY(OPTIONS_BUTTONS_START_Y + optionsButtons.size() * 75);
+        optionsButtons.add(saveMapButton);
+
+        saveMapButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                ioManager.saveMap(game);
+            }
+        });
+
+    }
+
+    private void createLoadMapButton() {
+
+        MenuButton loadMapButton = new MenuButton("Load");
+        loadMapButton.setLayoutX(OPTIONS_BUTTONS_START_X);
+        loadMapButton.setLayoutY(OPTIONS_BUTTONS_START_Y + optionsButtons.size() * 75);
+        optionsButtons.add(loadMapButton);
+
+        loadMapButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                ioManager.loadMap(game);
+            }
+        });
+
+    }
+
+    private void createExitButton() {
+
+        MenuButton exitButton = new MenuButton("Exit");
+        exitButton.setLayoutX(OPTIONS_BUTTONS_START_X);
+        exitButton.setLayoutY(OPTIONS_BUTTONS_START_Y + optionsButtons.size() * 75);
+        optionsButtons.add(exitButton);
+
+        exitButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                gameStage.close();
+            }
+        });
+
+    }
+
 
     private void createKeyListeners() {
 
@@ -45,9 +165,13 @@ public class GameViewManager {
             public void handle(KeyEvent keyEvent) {
                 if (keyEvent.getCode() == KeyCode.ESCAPE)
                     gameStage.close();
+                if (keyEvent.getCode() == KeyCode.K)
+                    showSubScene(optionsSubScene);
             }
         });
     }
+
+
 
     private void createMouseListeners() {
 
@@ -55,7 +179,8 @@ public class GameViewManager {
         gameScene.setOnMouseMoved(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                game.drawSelectedTile(mouseEvent.getX(), mouseEvent.getY());
+               // log.info(mouseEvent.getX() + " " + mouseEvent.getY());
+                game.select(mouseEvent.getSceneX(), mouseEvent.getSceneY());
             }
         });
 
@@ -64,7 +189,8 @@ public class GameViewManager {
         gameScene.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                log.info("Click!");
+
+                game.click(mouseEvent.getSceneX(), mouseEvent.getSceneY());
             }
         });
 
@@ -74,20 +200,54 @@ public class GameViewManager {
     private void initializeStage() {
 
         gamePane = new AnchorPane();
-        gameScene = new Scene(gamePane, GAME_WIDTH, GAME_HEIGHT);
+        gameScene = new Scene(gamePane, GAME_SCR_WIDTH, GAME_SCR_HEIGHT);
         gameStage = new Stage();
         gameStage.setScene(gameScene);
+
         gameStage.setFullScreen(true);
     }
 
-    public void createNewGame(Stage menuStage, MODE chosenMode){
+    void createNewGame(Stage menuStage, MODE chosenMode){
         this.menuStage = menuStage;
         this.menuStage.hide();
-//        drawTiles();
         ImageProvider provider = ImageProvider.getInstance();
-        game = new Game(gamePane, provider);
+        ioManager = new IOManager(chosenMode == MODE.NORMAL ? game : null);
+
+        if (chosenMode == MODE.NORMAL) {
+            game = new Game(provider, chosenMode);
+            addAllImageViews(game);
+            gamePane.getChildren().add(game.getSelectedTile());
+            gamePane.getChildren().addAll(game.getCharactersImageViews());
+            createOptionsSubScene();
+        } else if (chosenMode == MODE.MAP_CREATOR) {
+
+        } else throw new IllegalArgumentException("Illegal mode passed");
+
+
+        createGameLoop();
         gameStage.show();
     }
+
+    private void addAllImageViews(Game game){
+        for (ImageView[] iv: game.getTilesImageViews())
+            for (ImageView i: iv)
+                if (i != null)
+                    gamePane.getChildren().add(i);
+    }
+
+    private void createGameLoop(){
+
+        gameTimer = new AnimationTimer() {
+            @Override
+            public void handle(long l) {
+
+            }
+        };
+
+        gameTimer.start();
+    }
+
+
 
 
 

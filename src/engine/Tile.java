@@ -4,21 +4,29 @@ import java.util.ArrayList;
 
 public class Tile extends Hex{
 
-    private boolean isOccupied = false;
+    private boolean isAccessible;
 
     private boolean isSelected = false;
 
     private String type = "tileGrass";
 
-    private ArrayList<String> elements;
+    private int heightOfTile = 1;
+
+    protected ArrayList<String> elements;
 
     public Tile(int q, int r){
+
         super(q, r);
+        isAccessible = false;
+        isSelected = false;
     }
 
     public Tile(Hex h){
+
         super(h.q, h.r);
-        //return new Tile(h.q, h.r);
+        isAccessible = false;
+        isSelected = false;
+
     }
 
     public String getType() {
@@ -29,24 +37,24 @@ public class Tile extends Hex{
         this.type = type;
     }
 
-    public void occupy(){
-        isOccupied = true;
-    }
-
-    public void leave(){
-        isOccupied = false;
-    }
-
-    public boolean isOccupied(){
-        return isOccupied;
+    public boolean isAccessible(){
+        return isAccessible;
     }
 
     boolean isSelected(){
         return isSelected;
     }
 
-    void changeSelection(){
-        isSelected = !isSelected;
+    void setAccess(boolean access){
+        isAccessible = access;
+    }
+
+    void select(){
+        isSelected = true;
+    }
+
+    void unselect(){
+        isSelected = false;
     }
 
 

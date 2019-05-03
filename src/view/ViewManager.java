@@ -90,7 +90,7 @@ public class ViewManager {
         modeChooserSubScene = new MenuSubScene();
         mainPane.getChildren().add(modeChooserSubScene);
 
-        InfoLabel choseModeLabel = new InfoLabel("Chose the mode.");
+        InfoLabel choseModeLabel = new InfoLabel("Chose the mode");
         choseModeLabel.setLayoutX(170);
         choseModeLabel.setLayoutY(80);
         modeChooserSubScene.getPane().getChildren().add(choseModeLabel);
@@ -125,7 +125,7 @@ public class ViewManager {
 
     private MenuButton createButtonToStart() {
 
-        MenuButton startButton = new MenuButton("Start.");
+        MenuButton startButton = new MenuButton("Start");
         startButton.setLayoutX(350);
         startButton.setLayoutY(380);
 
@@ -135,6 +135,11 @@ public class ViewManager {
                 if (chosenMode != null){
                     GameViewManager gameManager = new GameViewManager();
                     gameManager.createNewGame(mainStage, chosenMode);
+                    showSubScene(modeChooserSubScene);
+                    for (ModeChooser mode : modesList) {
+                        mode.setIsCircleChosen(false);
+                    }
+                    chosenMode = null;
                 }
             }
         });

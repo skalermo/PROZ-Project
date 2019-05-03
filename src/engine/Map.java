@@ -3,14 +3,16 @@ package engine;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+import java.io.Serializable;
+
 import static java.lang.StrictMath.*;
 
 
-public class Map {
+public class Map implements Serializable {
 
     private static Logger log = LogManager.getRootLogger();
-    private static final int SCR_TILEWIDTH = 20; //30
-    private static final int SCR_TILEHEIGHT = 21; //21
+    static final int SCR_TILEWIDTH = 30; //30
+    static final int SCR_TILEHEIGHT = 21; //21
 
 
     private int q1 = 0;
@@ -27,7 +29,6 @@ public class Map {
     static private int initialStrength;
     static private int[] seeds;
 
-    // 20x20 is rather more than enough for now
 
 //    static HashMap<Point, Hex> map = new HashMap<>();
 
@@ -35,7 +36,7 @@ public class Map {
         if (mapShape != MapShape.PARALLELOGRAM) {
             throw new IllegalArgumentException("this constructor is for parallelogram");
         }
-        map = new Tile[SCR_TILEWIDTH][SCR_TILEHEIGHT];
+        map = new HexTileImage[SCR_TILEWIDTH][SCR_TILEHEIGHT];
             this.q1 = q1;
             this.q2 = q2;
             this.r1 = r1;
@@ -47,6 +48,8 @@ public class Map {
         }
 
     }
+
+
 
     public Map(MapShape mapShape, int map_width, int map_height){
         if (mapShape != MapShape.RECTANGLE)
@@ -100,12 +103,6 @@ public class Map {
         return this.map;
     }
 
-    public static Layout getLayout(boolean isPointy, int sizeX, int sizeY, double oriX, double oriY){
-        return new Layout(isPointy ? Layout.pointy : Layout.flat, new Point(sizeX, sizeY), new Point(oriX, oriY));
-    }
-
-
-
     public void randomizeMap(){
 
         seeds = new int[SCR_TILEHEIGHT*SCR_TILEWIDTH];
@@ -118,12 +115,15 @@ public class Map {
                 switch (biom){
                     case 0:
                         t.setType("tileGrass");
+                        t.setAccess(true);
                         break;
                     case 1:
                         t.setType("tileSnow");
+                        t.setAccess(true);
                         break;
                     case 2:
                         t.setType("tileWater_full");
+                        t.setAccess(false);
                         break;
                 }
             }
@@ -134,6 +134,7 @@ public class Map {
         int strength = 20;
         initialStrength = strength;
         plant(seed, biom, strength);
+        plant(seed+SCR_TILEWIDTH*2, biom, strength-2);
 //        for (int s: seeds)
 //            System.out.print(s);
 //        seed = (int)(random()*SCR_TILEWIDTH*SCR_TILEHEIGHT);
@@ -176,7 +177,7 @@ public class Map {
 
         }else if(initialStrength == strength)
         {
-            map[seed/SCR_TILEWIDTH][seed%SCR_TILEHEIGHT] = new Tile(seed%SCR_TILEHEIGHT, seed/SCR_TILEWIDTH);
+            map[seed/SCR_TILEWIDTH][seed%SCR_TILEHEIGHT] = new HexTileImage(seed%SCR_TILEHEIGHT, seed/SCR_TILEWIDTH);
 
             log.info(getNotNullSeed(seed));
             plant(getNotNullSeed(seed), biom, strength-1);
@@ -189,12 +190,15 @@ public class Map {
         switch (biom) {
             case 0:
                 this.map[a][b].setType("tileGrass");
+                this.map[a][b].setAccess(true);
                 break;
             case 1:
                 this.map[a][b].setType("tileSnow");
+                this.map[a][b].setAccess(true);
                 break;
             case 2:
                 this.map[a][b].setType("tileWater_full");
+                this.map[a][b].setAccess(false);
                 break;
         }
     }
@@ -202,18 +206,20 @@ public class Map {
     int getNotNullSeed(int nullSeed){
         int back = nullSeed;
         int forward = nullSeed;
-        while(back >= 0 || forward <= SCR_TILEWIDTH*SCR_TILEHEIGHT){
+
+        do {
 
             if (back > 0)
                 back--;
-            if (map[back/SCR_TILEWIDTH][back%SCR_TILEHEIGHT] != null)
+            if (map[back / SCR_TILEWIDTH][back % SCR_TILEHEIGHT] != null)
                 return back;
-            if (forward < SCR_TILEWIDTH*SCR_TILEHEIGHT)
+            if (forward < SCR_TILEWIDTH * SCR_TILEHEIGHT - 1)
                 forward++;
-            if (map[forward/SCR_TILEWIDTH][forward%SCR_TILEHEIGHT] != null)
+            if (map[forward / SCR_TILEWIDTH][forward % SCR_TILEHEIGHT] != null)
                 return forward;
 
-        }
+        } while (back > 0 || forward < SCR_TILEWIDTH * SCR_TILEHEIGHT - 1);
+
         return -1;
     }
 
