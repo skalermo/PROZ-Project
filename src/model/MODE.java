@@ -3,7 +3,7 @@ package model;
 public enum MODE {
 
     NORMAL("view/resources/modeChoser/modebot.png"),
-    DEVIANT("view/resources/modeChoser/modedeviant.png"),
+
     MAP_CREATOR("view/resources/modeChoser/modedev.png");
 
     private String urlMode;

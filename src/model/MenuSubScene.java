@@ -9,9 +9,9 @@ import javafx.util.Duration;
 public class MenuSubScene extends SubScene {
 
 //    private static final String FONT_PATH;
-    private static final String BACKGROUND_IMAGE = "model/resources/subSceneImage.png";
+    protected static final String BACKGROUND_IMAGE = "model/resources/subSceneImage.png";
 
-    private boolean isHidden;
+    protected boolean isHidden;
 
     public MenuSubScene() {
         super(new AnchorPane(), 700, 500);
