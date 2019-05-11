@@ -14,7 +14,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import model.GameMenuSubScene;
 import model.InfoLabel;
-import model.MODE;
 import model.MenuButton;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -37,11 +36,12 @@ public class GameViewManager {
 
     private Stage menuStage;
     private Game game;
-    private ImageView mode;
 
     private GameMenuSubScene optionsSubScene;
     private GameMenuSubScene sceneToHide;
     private List<MenuButton> optionsButtons;
+
+
 
     private AnimationTimer gameTimer;
 
@@ -119,7 +119,8 @@ public class GameViewManager {
         saveMapButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                ioManager.saveMap(game);
+
+                ioManager.saveMap(gameStage, game.getTiles());
             }
         });
 
@@ -135,7 +136,7 @@ public class GameViewManager {
         loadMapButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                ioManager.loadMap(game);
+                game.setTiles(ioManager.loadMap(gameStage));
             }
         });
 
@@ -165,6 +166,8 @@ public class GameViewManager {
             public void handle(KeyEvent keyEvent) {
                 if (keyEvent.getCode() == KeyCode.ESCAPE)
                     gameStage.close();
+
+                // should be changed
                 if (keyEvent.getCode() == KeyCode.K)
                     showSubScene(optionsSubScene);
             }
@@ -205,26 +208,19 @@ public class GameViewManager {
         gameStage.setFullScreen(true);
     }
 
-    void createNewGame(Stage menuStage, MODE chosenMode){
+    void createNewGame(Stage menuStage){
         this.menuStage = menuStage;
         this.menuStage.hide();
 
         ImageProvider provider = ImageProvider.getInstance();
-        ioManager = new IOManager(chosenMode == MODE.NORMAL ? game : null);
+        ioManager = new IOManager();
 
-        if (chosenMode == MODE.NORMAL) {
+        game = new Game(provider);
+        addAllImageViews(game);
 
-            game = new Game(provider, chosenMode);
-            addAllImageViews(game);
-
-            gamePane.getChildren().add(game.getSelectedTile());
-            gamePane.getChildren().addAll(game.getCharactersImageViews());
-            createOptionsSubScene();
-
-        } else if (chosenMode == MODE.MAP_CREATOR) {
-
-        }
-
+        gamePane.getChildren().add(game.getSelectedTile());
+        gamePane.getChildren().addAll(game.getCharactersImageViews());
+        createOptionsSubScene();
 
         createGameLoop();
         gameStage.show();

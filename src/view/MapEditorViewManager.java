@@ -55,6 +55,7 @@ public class MapEditorViewManager {
 
     }
 
+
     private void showSubScene(GameMenuSubScene subScene) {
 
         if (subScene.equals(sceneToHide)) {
@@ -228,6 +229,8 @@ public class MapEditorViewManager {
         createSessionLoop();
         editorStage.show();
     }
+
+
 
     private void addAllImageViews(MapEditor editor){
         for (List<ImageView> imageViews: editor.getImageViews())

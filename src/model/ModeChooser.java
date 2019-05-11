@@ -26,7 +26,7 @@ public class ModeChooser extends VBox {
         this.mode = mode;
         isCircleChosen = false;
         this.setAlignment(Pos.CENTER);
-        this.setSpacing(20);
+        this.setSpacing(50);
 
         this.getChildren().add(circleImage);
         this.getChildren().add(modeImage);

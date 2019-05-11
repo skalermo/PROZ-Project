@@ -2,7 +2,7 @@ package model;
 
 public enum MODE {
 
-    NORMAL("view/resources/modeChoser/modebot.png"),
+    GAME("view/resources/modeChoser/modebot.png"),
 
     MAP_CREATOR("view/resources/modeChoser/modedev.png");
 

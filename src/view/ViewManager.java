@@ -133,8 +133,13 @@ public class ViewManager {
             @Override
             public void handle(ActionEvent actionEvent) {
                 if (chosenMode != null){
-                    GameViewManager gameManager = new GameViewManager();
-                    gameManager.createNewGame(mainStage, chosenMode);
+                    if (chosenMode == MODE.GAME) {
+                        GameViewManager gameManager = new GameViewManager();
+                        gameManager.createNewGame(mainStage);
+                    } else {
+                        MapEditorViewManager editorManager = new MapEditorViewManager();
+                        editorManager.createNewSession(mainStage);
+                    }
                     showSubScene(modeChooserSubScene);
                     for (ModeChooser mode : modesList) {
                         mode.setIsCircleChosen(false);
@@ -247,7 +252,7 @@ public class ViewManager {
     }
 
     private void createBackground() {
-        Image backgroundImage = new Image("/view/resources/shot.png", 1024, 768, false, true);
+        Image backgroundImage = new Image("/view/resources/sample.png", 1024, 768, false, true);
         BackgroundImage background  = new BackgroundImage(backgroundImage, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, null);
         mainPane.setBackground(new Background(background));
     }

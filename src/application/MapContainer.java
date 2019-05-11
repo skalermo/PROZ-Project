@@ -1,6 +1,5 @@
 package application;
 
-import engine.Game;
 import engine.Tile;
 
 import java.io.Serializable;
@@ -10,8 +9,8 @@ public class MapContainer implements Serializable {
 
     private List<List<Tile>> tiles;
 
-    public MapContainer(Game game){
-        this.tiles = game.getTiles();
+    public MapContainer(List<List<Tile>> tiles){
+        this.tiles = tiles;
     }
 
     public List<List<Tile>> getTiles() {

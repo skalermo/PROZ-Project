@@ -1,7 +1,6 @@
 package engine;
 
 import javafx.scene.image.ImageView;
-import model.MODE;
 import view.ImageProvider;
 
 import java.util.ArrayList;
@@ -17,14 +16,12 @@ public class Game {
     private List<List<ImageView>> imageViews;
     private List<List<Tile>> tiles;
 
-    public Game(ImageProvider provider, MODE chosenMode){
+    public Game(ImageProvider provider){
 
         this.provider = provider;
         init2dArrays();
         layout = new Layout(Layout.pointy, new Point(37.53, 31.5), new Point(-32, -32)); //37, 32
         Map.createMap(tiles, imageViews, MapShape.HEXAGON);
-
-//        map.randomizeMap();
         createImageViews();
         chara = new Character();
         lastSelectedTile = null;
@@ -72,12 +69,11 @@ public class Game {
 
     private void createImageViews(){
 
-        for (int i = 0; i < tiles.size(); i++){
-            for (int j = 0; j < tiles.get(i).size(); j++){
-                if (tiles.get(i).get(j) != null)
-                    imageViews.get(i).set(j, createImageView(tiles.get(i).get(j)));
-            }
-        }
+        for (int i = 0; i < tiles.size(); i++)
+            for (int j = 0; j < tiles.get(i).size(); j++)
+                imageViews.get(i).set(j, createImageView(tiles.get(i).get(j)));
+
+
     }
 
     private ImageView createImageView(Tile t) {
@@ -126,11 +122,11 @@ public class Game {
 
     public void click(double x, double y) {
         Layout layout1 = new Layout(Layout.pointy, new Point(37.53, 31.5), new Point(-0, -0));
-        Hex selectedTile = layout1.pixelToHex(new Point(x, y)).hexRound();
-        if (isAccessible(selectedTile) && chara.getH().distance(selectedTile) < 3)
+        Hex selectedHex = layout1.pixelToHex(new Point(x, y)).hexRound();
+        if (isAccessible(selectedHex) && chara.getH().distance(selectedHex) < 3)
         {
-            chara.setH(selectedTile);
-            Point p = layout.hexToPixel(selectedTile);
+            chara.setH(selectedHex);
+            Point p = layout.hexToPixel(selectedHex);
             chara.getImageView().setLayoutX(p.x+15);
             chara.getImageView().setLayoutY(p.y-10);
         }
@@ -139,13 +135,13 @@ public class Game {
 
     private boolean isAccessible(Hex h){
 
-        return between(h.r, 0, Map.SCR_TILEWIDTH) &&
-                between(h.q, 0, Map.SCR_TILEHEIGHT) &&
+        return notOutOfBounds(h) &&
             tiles.get(h.r).get(h.q).isAccessible();
     }
 
-    private boolean between(int v, int lb, int hb){
-        return lb <= v && v < hb;
+    private boolean notOutOfBounds(Hex h){
+
+        return 0 <= h.r && h.r < Map.SCR_TILEWIDTH && 0 <= h.q && h.q < Map.SCR_TILEHEIGHT;
     }
 
 
