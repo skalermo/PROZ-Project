@@ -43,6 +43,8 @@ public class MapEditorViewManager {
 
     private AnimationTimer editorTimer;
 
+    private boolean isMouseOnTopRightEdge = false;
+
     private static Logger log = LogManager.getRootLogger();
 
     public MapEditorViewManager(){
@@ -88,14 +90,19 @@ public class MapEditorViewManager {
         createExitButton();
     }
 
+    private void addButton(MenuButton button) {
+
+        button.setLayoutX(OPTIONS_BUTTONS_START_X);
+        button.setLayoutY(OPTIONS_BUTTONS_START_Y + optionsButtons.size() * 75);
+        optionsButtons.add(button);
+
+    }
 
 
     private void createBackButton() {
 
         MenuButton backButton = new MenuButton("Main menu");
-        backButton.setLayoutX(OPTIONS_BUTTONS_START_X);
-        backButton.setLayoutY(OPTIONS_BUTTONS_START_Y + optionsButtons.size() * 75);
-        optionsButtons.add(backButton);
+        addButton(backButton);
 
         backButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -111,9 +118,7 @@ public class MapEditorViewManager {
     private void createSaveMapButton() {
 
         MenuButton saveMapButton = new MenuButton("Save");
-        saveMapButton.setLayoutX(OPTIONS_BUTTONS_START_X);
-        saveMapButton.setLayoutY(OPTIONS_BUTTONS_START_Y + optionsButtons.size() * 75);
-        optionsButtons.add(saveMapButton);
+        addButton(saveMapButton);
 
         saveMapButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -128,9 +133,7 @@ public class MapEditorViewManager {
     private void createLoadMapButton() {
 
         MenuButton loadMapButton = new MenuButton("Load");
-        loadMapButton.setLayoutX(OPTIONS_BUTTONS_START_X);
-        loadMapButton.setLayoutY(OPTIONS_BUTTONS_START_Y + optionsButtons.size() * 75);
-        optionsButtons.add(loadMapButton);
+        addButton(loadMapButton);
 
         loadMapButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -144,9 +147,7 @@ public class MapEditorViewManager {
     private void createExitButton() {
 
         MenuButton exitButton = new MenuButton("Exit");
-        exitButton.setLayoutX(OPTIONS_BUTTONS_START_X);
-        exitButton.setLayoutY(OPTIONS_BUTTONS_START_Y + optionsButtons.size() * 75);
-        optionsButtons.add(exitButton);
+        addButton(exitButton);
 
         exitButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -181,6 +182,15 @@ public class MapEditorViewManager {
         editorScene.setOnMouseMoved(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
+                if (mouseEvent.getSceneX() + 5 > editorScene.getWidth() && mouseEvent.getSceneY() < editorScene.getHeight()/3)
+                    isMouseOnTopRightEdge = true;
+                if (mouseEvent.getSceneX() + 5 < editorScene.getWidth())
+                    isMouseOnTopRightEdge = false;
+                if (isMouseOnTopRightEdge && mouseEvent.getSceneY() > editorScene.getHeight()*2/3) {
+                    showSubScene(optionsSubScene);
+                    isMouseOnTopRightEdge = false;
+                }
+
                 editor.moved(mouseEvent.getSceneX(), mouseEvent.getSceneY());
             }
         });
