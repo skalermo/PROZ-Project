@@ -1,12 +1,11 @@
 package engine;
 
 import javafx.scene.image.ImageView;
+import org.apache.log4j.LogManager;
 import view.ImageProvider;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static java.lang.StrictMath.floorMod;
 
 public class MapEditor {
 
@@ -23,7 +22,7 @@ public class MapEditor {
     public MapEditor(ImageProvider provider) {
 
         this.provider = provider;
-        layout = new Layout(Layout.pointy, new Point(37.53, 31.5), new Point(-32, -32)); //37, 32
+        layout = new Layout(Layout.pointy, new Point(37.53, 31.5), new Point(-31.5, -31.5));
         init2dArrays();
         Map.createMap(tiles, imageViews, MapShape.HEXAGON);
         refreshImageViews(tiles);
@@ -33,13 +32,13 @@ public class MapEditor {
 
 
     private void init2dArrays() {
-        imageViews = new ArrayList<>(Map.SCR_TILEWIDTH);
-        tiles = new ArrayList<>(Map.SCR_TILEWIDTH);
-        for (int i = 0; i < Map.SCR_TILEWIDTH; i++) {
-            tiles.add(new ArrayList<>(Map.SCR_TILEHEIGHT));
-            imageViews.add(new ArrayList<>(Map.SCR_TILEHEIGHT));
-            for (int j = 0; j < Map.SCR_TILEHEIGHT; j++){
-                Tile t = new Tile(j, i);
+        imageViews = new ArrayList<>(Map.SCR_TILEHEIGHT);
+        tiles = new ArrayList<>(Map.SCR_TILEHEIGHT);
+        for (int i = 0; i < Map.SCR_TILEHEIGHT; i++) {
+            tiles.add(new ArrayList<>(Map.SCR_TILEWIDTH));
+            imageViews.add(new ArrayList<>(Map.SCR_TILEWIDTH));
+            for (int j = 0; j < Map.SCR_TILEWIDTH; j++){
+                Tile t = new Tile(j - (i+1)/2, i);
                 tiles.get(i).add(j, t);
                 imageViews.get(i).add(j, createImageView(t));
             }
@@ -71,16 +70,6 @@ public class MapEditor {
 
     }
 
-    private void createImageViews(){
-
-        for (int i = 0; i < tiles.size(); i++){
-            for (int j = 0; j < tiles.get(i).size(); j++){
-                if (tiles.get(i).get(j) != null)
-                    imageViews.get(i).set(j, createImageView(tiles.get(i).get(j)));
-            }
-        }
-    }
-
     private ImageView createImageView(Tile t) {
         ImageView imageView = new ImageView();
         imageView.setImage(provider.getImage(t.getType()));
@@ -108,7 +97,7 @@ public class MapEditor {
         Layout layout1 = new Layout(Layout.pointy, new Point(37.53, 31.5), new Point(-0, -0));
         Tile selectedTile = new Tile(layout1.pixelToHex(new Point(x, y)).hexRound());
         Point p = layout.hexToPixel(selectedTile);
-
+        LogManager.getRootLogger().info(selectedTile.q + " " + selectedTile.r);
         selection.setLayoutX(p.x);
         selection.setLayoutY(p.y);
     }
@@ -116,11 +105,13 @@ public class MapEditor {
     public void clicked(double x, double y) {
         Layout layout1 = new Layout(Layout.pointy, new Point(37.53, 31.5), new Point(-0, -0));
         Hex selectedTile = layout1.pixelToHex(new Point(x, y)).hexRound();
-        if (notOutOfBounds(selectedTile) && tiles.get(selectedTile.r).get(selectedTile.q) != null){
-            tiles.get(selectedTile.r).get(selectedTile.q).setType("empty");
-            imageViews.get(selectedTile.r).get(selectedTile.q).setImage(provider.getImage("emtpy"));
-            tiles.get(selectedTile.r).get(selectedTile.q).setAccess(false);
-        }
+
+        int q = selectedTile.q;
+        int r = selectedTile.r;
+
+        Map.getTile(tiles, q, r).setType("empty");
+        Map.getTile(tiles, q, r).setAccess(false);
+        Map.getImageView(imageViews, q, r).setImage(provider.getImage("empty"));
 
     }
 
@@ -130,20 +121,23 @@ public class MapEditor {
         Layout layout1 = new Layout(Layout.pointy, new Point(37.53, 31.5), new Point(-0, -0));
         Tile selectedTile = new Tile(layout1.pixelToHex(new Point(x, y)).hexRound());
         Point p = layout.hexToPixel(selectedTile);
-        System.out.println(selectedTile.r + " " + selectedTile.q + " " + floorMod(selectedTile.r, Map.SCR_TILEWIDTH) + " " + floorMod(selectedTile.q, Map.SCR_TILEHEIGHT));
-        //if (notOutOfBounds(selectedTile) && tiles.get(selectedTile.r).get(selectedTile.q) != null){
-            tiles.get(floorMod(selectedTile.r, Map.SCR_TILEWIDTH)).get(floorMod(selectedTile.q, Map.SCR_TILEHEIGHT)).setType("tileMagic");
-            imageViews.get(floorMod(selectedTile.r, Map.SCR_TILEWIDTH)).get(floorMod(selectedTile.q, Map.SCR_TILEHEIGHT)).setImage(provider.getImage("tileMagic"));
-            tiles.get(floorMod(selectedTile.r, Map.SCR_TILEWIDTH)).get(floorMod(selectedTile.q, Map.SCR_TILEHEIGHT)).setAccess(true);
-        //}
+
+        int q = selectedTile.q;
+        int r = selectedTile.r;
+
+//        System.out.println(selectedTile.r + " " + selectedTile.q + " " + floorMod(selectedTile.r, Map.SCR_TILEWIDTH) + " " + floorMod(selectedTile.q, Map.SCR_TILEHEIGHT));
+//        System.out.println(floorMod(1, 2));
+
+        Map.getTile(tiles, q, r).setType("tileMagic");
+        Map.getTile(tiles, q, r).setAccess(true);
+        Map.getImageView(imageViews, q, r).setImage(provider.getImage("tileMagic"));
+    //}
 
 
         selection.setLayoutX(p.x);
         selection.setLayoutY(p.y);
 
     }
-
-
 
     private boolean isAccessible(Hex h){
 

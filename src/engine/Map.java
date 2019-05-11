@@ -1,8 +1,6 @@
 package engine;
 
 import javafx.scene.image.ImageView;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 
 import java.util.List;
 
@@ -11,10 +9,9 @@ import static java.lang.StrictMath.*;
 
 public class Map {
 
-    private static Logger log = LogManager.getRootLogger();
 
-    public static final int SCR_TILEWIDTH = 25; //25
-    public static final int SCR_TILEHEIGHT = 44; //44
+    public static final int SCR_TILEWIDTH = 31; //25
+    public static final int SCR_TILEHEIGHT = 24; //44
 //    static final int INDEX_OFFSET = 13;
 
 
@@ -48,48 +45,45 @@ public class Map {
                     for (int r = t1; r <= t2; r++) {
                         int a = r + map_radius;// + ((map_radius<10)?(5-map_radius/2):0);
                         int b = q + map_radius;// + (5-map_radius/2);
-                        a = floorMod(a, SCR_TILEWIDTH);
-                        b = floorMod(b, SCR_TILEHEIGHT);
-                        changeTile(tiles.get(a).get(b), biom);
-
+                        changeTile(getTile(tiles, b, a), biom);
                     }
                 }
                 break;
 
-            case PARALLELOGRAM:
-                for (int q = q1; q <= q2; q++) {
-                    for (int r = r1; r <= r2; r++) {
-                        tiles.get(r).set(q, new Tile(q, r));
-                    }
-                }
-                break;
-
-            case RECTANGLE:
-                for (int r = 0; r < map_height; r++) {
-                    int r_offset = r>>1; // or r>>1
-                    for (int q = -r_offset; q < map_width - r_offset; q++) {
-
-                        int a = r;// map_width;///2;
-                        int b = q + r_offset;// + map_height/2;
-                        Tile tile = new Tile(b, a);
-                        a = floorMod(a, SCR_TILEWIDTH);
-                        b = floorMod(b, SCR_TILEHEIGHT);
-                        changeTile(tile, biom);
-                        tiles.get(a).set(b, tile);
-
-                    }
-                }
-                break;
-
-            case TRIANGLE:
-                for (int q = 0; q <= map_size; q++) {
-                    for (int r = 0; r <= map_size - q; r++) {
-                        Tile tile = new Tile(q, r);
-                        changeTile(tile, biom);
-                        tiles.get(r).set(q, tile);
-                    }
-                }
-                break;
+//            case PARALLELOGRAM:
+//                for (int q = q1; q <= q2; q++) {
+//                    for (int r = r1; r <= r2; r++) {
+//                        tiles.get(r).set(q, new Tile(q, r));
+//                    }
+//                }
+//                break;
+//
+//            case RECTANGLE:
+//                for (int r = 0; r < map_height; r++) {
+//                    int r_offset = r>>1; // or r>>1
+//                    for (int q = -r_offset; q < map_width - r_offset; q++) {
+//
+//                        int a = r;// map_width;///2;
+//                        int b = q + r_offset;// + map_height/2;
+//                        Tile tile = new Tile(b, a);
+//                        a = floorMod(a, SCR_TILEWIDTH);
+//                        b = floorMod(b, SCR_TILEHEIGHT);
+//                        changeTile(tile, biom);
+//                        tiles.get(a).set(b, tile);
+//
+//                    }
+//                }
+//                break;
+//
+//            case TRIANGLE:
+//                for (int q = 0; q <= map_size; q++) {
+//                    for (int r = 0; r <= map_size - q; r++) {
+//                        Tile tile = new Tile(q, r);
+//                        changeTile(tile, biom);
+//                        tiles.get(r).set(q, tile);
+//                    }
+//                }
+//                break;
             default:
                 createMap(tiles, imageViews, MapShape.HEXAGON);
 
@@ -116,7 +110,20 @@ public class Map {
         }
     }
 
-    static private void changeTiles(List<List<Tile>> tiles, List<List<Tile>> imageViews){
+    static Tile getTile(List<List<Tile>> tiles, int q, int r){
+        return tiles.get(r).get(q + (r+1)/2);
+    }
+
+    static void setTile(List<List<Tile>> tiles, int q, int r, Tile tile){
+        tiles.get(r).set(q + (r+1)/2, tile);
+    }
+
+    static ImageView getImageView(List<List<ImageView>> imageViews, int q, int r){
+        return imageViews.get(r).get(q + (r+1)/2);
+    }
+
+    static void setImageView(List<List<ImageView>> imageViews, int q, int r, ImageView imageView){
+        imageViews.get(r).set(q + (r+1)/2, imageView);
     }
 
 
