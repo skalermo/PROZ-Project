@@ -6,13 +6,13 @@ import javafx.util.Duration;
 public class GameMenuSubScene extends MenuSubScene{
     public GameMenuSubScene() {
         super();
-        prefWidth(700);
-        prefHeight(500);
+        setWidth(500);
+        setHeight(350);
 
         isHidden = true;
 
-        setLayoutX(2000);
-        setLayoutY(290);
+        setLayoutX(1920);
+        setLayoutY(365);
     }
 
     public void moveSubScene() {
@@ -22,7 +22,7 @@ public class GameMenuSubScene extends MenuSubScene{
         transition.setNode(this);
 
         if (isHidden) {
-            transition.setToX(-1390);
+            transition.setToX(-1210);
             isHidden = false;
         } else {
             transition.setToX(0);
