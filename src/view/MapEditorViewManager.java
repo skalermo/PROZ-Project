@@ -9,11 +9,11 @@ import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import model.GameMenuSubScene;
-import model.InfoLabel;
 import model.MenuButton;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -31,8 +31,8 @@ public class MapEditorViewManager {
     private static final int GAME_SCR_WIDTH = 1920;
     private static final int GAME_SCR_HEIGHT = 1080;
 
-    private static final int OPTIONS_BUTTONS_START_X = 255;
-    private static final int OPTIONS_BUTTONS_START_Y = 113;
+    private static final int OPTIONS_BUTTONS_START_X = 155;
+    private static final int OPTIONS_BUTTONS_START_Y = 40;
 
     private Stage menuStage;
     private MapEditor editor;
@@ -74,11 +74,6 @@ public class MapEditorViewManager {
 
         optionsSubScene = new GameMenuSubScene();
         editorPane.getChildren().add(optionsSubScene);
-
-        InfoLabel choseModeLabel = new InfoLabel("Options");
-        choseModeLabel.setLayoutX(1000);
-        choseModeLabel.setLayoutY(300);
-        optionsSubScene.getPane().getChildren().add(choseModeLabel);
         optionsSubScene.getPane().getChildren().addAll(optionsButtons);
     }
 
@@ -200,14 +195,18 @@ public class MapEditorViewManager {
         editorScene.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                editor.clicked(mouseEvent.getSceneX(), mouseEvent.getSceneY());
+                if (mouseEvent.getButton() == MouseButton.PRIMARY)
+                    editor.leftClicked(mouseEvent.getSceneX(), mouseEvent.getSceneY());
+                if (mouseEvent.getButton() == MouseButton.SECONDARY)
+                    editor.rightClicked(mouseEvent.getSceneX(), mouseEvent.getSceneY());
             }
         });
 
         editorScene.setOnMouseDragged(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                editor.dragged(mouseEvent.getSceneX(), mouseEvent.getSceneY());
+                if (mouseEvent.getButton() == MouseButton.PRIMARY)
+                    editor.dragged(mouseEvent.getSceneX(), mouseEvent.getSceneY());
             }
         });
 

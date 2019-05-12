@@ -103,7 +103,7 @@ public class MapEditor {
         selection.setLayoutY(p.y);
     }
 
-    public void clicked(double x, double y) {
+    public void leftClicked(double x, double y) {
         Layout layout1 = new Layout(Layout.pointy, new Point(37.53, 31.5), new Point(-0, -0));
         Hex selectedTile = layout1.pixelToHex(new Point(x, y)).hexRound();
 
@@ -113,6 +113,10 @@ public class MapEditor {
         Map.getTile(tiles, q, r).setType("empty");
         Map.getTile(tiles, q, r).setAccess(false);
         Map.getImageView(imageViews, q, r).setImage(provider.getImage("empty"));
+
+    }
+
+    public void rightClicked(double x, double y) {
 
     }
 
