@@ -1,5 +1,6 @@
 package model;
 
+import application.Logger;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.effect.DropShadow;
@@ -44,7 +45,7 @@ public class MenuButton extends Button {
         setLayoutY(getLayoutY() + 4);
     }
 
-    private void setButtonRealesedStyle() {
+    private void setButtonReleasedStyle() {
 
         setStyle(BUTTON_RELEASED_STYLE);
         setPrefHeight(49);
@@ -80,7 +81,7 @@ public class MenuButton extends Button {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
-                    setButtonRealesedStyle();
+                    setButtonReleasedStyle();
                 }
             }
         });
