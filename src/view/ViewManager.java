@@ -90,10 +90,10 @@ public class ViewManager {
         modeChooserSubScene = new MenuSubScene();
         mainPane.getChildren().add(modeChooserSubScene);
 
-        InfoLabel choseModeLabel = new InfoLabel("Chose the mode");
-        choseModeLabel.setLayoutX(170);
-        choseModeLabel.setLayoutY(80);
-        modeChooserSubScene.getPane().getChildren().add(choseModeLabel);
+        InfoLabel chooseModeLabel = new InfoLabel("Choose the mode");
+        chooseModeLabel.setLayoutX(170);
+        chooseModeLabel.setLayoutY(20);
+        modeChooserSubScene.getPane().getChildren().add(chooseModeLabel);
         modeChooserSubScene.getPane().getChildren().add(createModsToChoose());
         modeChooserSubScene.getPane().getChildren().add(createButtonToStart());
     }
@@ -119,15 +119,15 @@ public class ViewManager {
             });
         }
         box.setLayoutX(300 - (75 * 2));
-        box.setLayoutY(150);
+        box.setLayoutY(100);
         return box;
     }
 
     private MenuButton createButtonToStart() {
 
         MenuButton startButton = new MenuButton("Start");
-        startButton.setLayoutX(350);
-        startButton.setLayoutY(380);
+        startButton.setLayoutX(250);
+        startButton.setLayoutY(430);
 
         startButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override

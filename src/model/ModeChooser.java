@@ -23,6 +23,8 @@ public class ModeChooser extends VBox {
 
         circleImage = new ImageView(circleNotChosen);
         modeImage = new ImageView(mode.getUrlMode());
+        modeImage.setFitHeight(250);
+        modeImage.setPreserveRatio(true);
         this.mode = mode;
         isCircleChosen = false;
         this.setAlignment(Pos.CENTER);

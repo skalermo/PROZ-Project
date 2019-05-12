@@ -2,9 +2,9 @@ package model;
 
 public enum MODE {
 
-    GAME("view/resources/modeChoser/modebot.png"),
+    GAME("view/resources/modeChoser/gameMod.png"),
 
-    MAP_CREATOR("view/resources/modeChoser/modedev.png");
+    MAP_CREATOR("view/resources/modeChoser/editorMod.png");
 
     private String urlMode;
 
