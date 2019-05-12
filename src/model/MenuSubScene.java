@@ -2,14 +2,15 @@ package model;
 
 import javafx.animation.TranslateTransition;
 import javafx.scene.SubScene;
-import javafx.scene.image.Image;
-import javafx.scene.layout.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
 
 public class MenuSubScene extends SubScene {
 
 //    private static final String FONT_PATH;
     protected static final String BACKGROUND_IMAGE = "model/resources/subSceneImage.png";
+    private static final String BACKGROUND_STYLE = "-fx-background-color: rgba(215, 215, 215, 0.85)";
+
 
     protected boolean isHidden;
 
@@ -18,11 +19,9 @@ public class MenuSubScene extends SubScene {
         prefWidth(700);
         prefHeight(500);
 
-        BackgroundImage image = new BackgroundImage(new Image(BACKGROUND_IMAGE, 700, 500, false, true), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, null);
+        AnchorPane root = (AnchorPane) this.getRoot();
 
-        AnchorPane root2 = (AnchorPane) this.getRoot();
-
-        root2.setBackground(new Background(image));
+        root.setStyle(BACKGROUND_STYLE);
 
         isHidden = true;
 
@@ -37,7 +36,7 @@ public class MenuSubScene extends SubScene {
         transition.setNode(this);
 
         if (isHidden) {
-            transition.setToX(-726);
+            transition.setToX(-744);
             isHidden = false;
         } else {
             transition.setToX(0);

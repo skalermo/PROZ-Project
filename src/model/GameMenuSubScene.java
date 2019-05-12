@@ -1,8 +1,6 @@
 package model;
 
 import javafx.animation.TranslateTransition;
-import javafx.scene.image.Image;
-import javafx.scene.layout.*;
 import javafx.util.Duration;
 
 public class GameMenuSubScene extends MenuSubScene{
@@ -10,12 +8,6 @@ public class GameMenuSubScene extends MenuSubScene{
         super();
         prefWidth(700);
         prefHeight(500);
-
-        BackgroundImage image = new BackgroundImage(new Image(BACKGROUND_IMAGE, 700, 500, false, true), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, null);
-
-        AnchorPane root2 = (AnchorPane) this.getRoot();
-
-        root2.setBackground(new Background(image));
 
         isHidden = true;
 

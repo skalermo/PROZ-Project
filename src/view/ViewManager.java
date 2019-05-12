@@ -27,7 +27,7 @@ public class ViewManager {
     private static final int SCR_WIDTH = 1024;
     private static final int SCR_HEIGHT = 768;
 
-    private static final int MENU_BUTTONS_START_X = 100;
+    private static final int MENU_BUTTONS_START_X = 45;
     private static final int MENU_BUTTONS_START_Y = 150;
 
 
