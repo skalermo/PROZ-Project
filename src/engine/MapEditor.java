@@ -1,7 +1,6 @@
 package engine;
 
 import javafx.scene.image.ImageView;
-import org.apache.log4j.LogManager;
 import view.ImageProvider;
 
 import java.util.ArrayList;
@@ -56,8 +55,10 @@ public class MapEditor {
     }
 
     public void setTiles(List<List<Tile>> tiles) {
-        this.tiles = tiles;
-        refreshImageViews(tiles);
+        if (tiles != null) {
+            this.tiles = tiles;
+            refreshImageViews(tiles);
+        }
     }
 
     private void refreshImageViews(List<List<Tile>> tiles) {
@@ -97,7 +98,7 @@ public class MapEditor {
         Layout layout1 = new Layout(Layout.pointy, new Point(37.53, 31.5), new Point(-0, -0));
         Tile selectedTile = new Tile(layout1.pixelToHex(new Point(x, y)).hexRound());
         Point p = layout.hexToPixel(selectedTile);
-        LogManager.getRootLogger().info(selectedTile.q + " " + selectedTile.r);
+//        LogManager.getRootLogger().info(selectedTile.q + " " + selectedTile.r);
         selection.setLayoutX(p.x);
         selection.setLayoutY(p.y);
     }

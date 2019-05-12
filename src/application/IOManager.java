@@ -40,6 +40,8 @@ public class IOManager {
             oos.writeObject(container);
             oos.close();
 
+        } catch (NullPointerException e) {
+            return;
         } catch (IOException e) {
             e.printStackTrace();
         }
