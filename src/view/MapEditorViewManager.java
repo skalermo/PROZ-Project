@@ -7,16 +7,12 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import model.GameMenuSubScene;
+import model.InstrumentPanel;
 import model.MenuButton;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,12 +36,11 @@ public class MapEditorViewManager {
     private GameMenuSubScene optionsSubScene;
     private GameMenuSubScene sceneToHide;
     private List<MenuButton> optionsButtons;
+    private InstrumentPanel instrumentPanel;
 
     private AnimationTimer editorTimer;
 
     private boolean isMouseOnTopRightEdge = false;
-
-    private static Logger log = LogManager.getRootLogger();
 
     public MapEditorViewManager(){
 
@@ -160,7 +155,7 @@ public class MapEditorViewManager {
             @Override
             public void handle(KeyEvent keyEvent) {
                 if (keyEvent.getCode() == KeyCode.ESCAPE)
-                    editorStage.close();
+                    showSubScene(optionsSubScene);
 
                 // should be changed
                 if (keyEvent.getCode() == KeyCode.K)
@@ -218,6 +213,7 @@ public class MapEditorViewManager {
         editorPane = new AnchorPane();
         editorScene = new Scene(editorPane, GAME_SCR_WIDTH, GAME_SCR_HEIGHT);
         editorStage = new Stage();
+        editorStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         editorStage.setScene(editorScene);
         editorStage.setFullScreen(true);
     }
@@ -233,10 +229,20 @@ public class MapEditorViewManager {
         addAllImageViews(editor);
 
         editorPane.getChildren().add(editor.getSelectedTile());
+        createInstrumentPanel();
         createOptionsSubScene();
 
         createSessionLoop();
         editorStage.show();
+    }
+
+    private void createInstrumentPanel() {
+        instrumentPanel = new InstrumentPanel();
+        instrumentPanel.setVisible(true);
+        instrumentPanel.setLayoutX(10);
+        instrumentPanel.setLayoutY(100);
+        instrumentPanel.setPrefSize(46, 100);
+        editorPane.getChildren().add(instrumentPanel);
     }
 
 
@@ -244,8 +250,7 @@ public class MapEditorViewManager {
     private void addAllImageViews(MapEditor editor){
         for (List<ImageView> imageViews: editor.getImageViews())
             for (ImageView imageView: imageViews)
-
-                    editorPane.getChildren().add(imageView);
+                editorPane.getChildren().add(imageView);
     }
 
     private void createSessionLoop(){
