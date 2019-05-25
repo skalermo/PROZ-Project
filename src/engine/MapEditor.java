@@ -37,7 +37,7 @@ public class MapEditor {
             tiles.add(new ArrayList<>(Map.SCR_TILEWIDTH));
             imageViews.add(new ArrayList<>(Map.SCR_TILEWIDTH));
             for (int j = 0; j < Map.SCR_TILEWIDTH; j++){
-                Tile t = new Tile(j - (i+1)/2, i);
+                Tile t = Map.arrIndeciesToTile(i, j);
                 tiles.get(i).add(j, t);
                 imageViews.get(i).add(j, createImageView(t));
             }
@@ -152,7 +152,7 @@ public class MapEditor {
 
     private boolean notOutOfBounds(Hex h){
 
-        return 0 <= h.r && h.r < Map.SCR_TILEWIDTH && 0 <= h.q && h.q < Map.SCR_TILEHEIGHT;
+        return 2 <= h.r && h.r < Map.SCR_TILEWIDTH-2 && 2 <= h.q && h.q < Map.SCR_TILEHEIGHT-2;
     }
 
 

@@ -12,7 +12,6 @@ public class Map {
 
     public static final int SCR_TILEWIDTH = 31; //25
     public static final int SCR_TILEHEIGHT = 24; //44
-//    static final int INDEX_OFFSET = 13;
 
 
     private static int q1 = 0;
@@ -116,6 +115,10 @@ public class Map {
 
     static void setTile(List<List<Tile>> tiles, int q, int r, Tile tile){
         tiles.get(r).set(q + (r+1)/2, tile);
+    }
+
+    static Tile arrIndeciesToTile(int i, int j) {
+        return new Tile(j - (i+1)/2, i);
     }
 
     static ImageView getImageView(List<List<ImageView>> imageViews, int q, int r){
