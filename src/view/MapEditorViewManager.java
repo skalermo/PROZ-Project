@@ -201,7 +201,9 @@ public class MapEditorViewManager {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 if (mouseEvent.getButton() == MouseButton.PRIMARY)
-                    editor.dragged(mouseEvent.getSceneX(), mouseEvent.getSceneY());
+                    editor.leftClicked(mouseEvent.getSceneX(), mouseEvent.getSceneY());
+                else if (mouseEvent.getButton() == MouseButton.SECONDARY)
+                    editor.rightClicked(mouseEvent.getSceneX(), mouseEvent.getSceneY());
             }
         });
 

@@ -117,6 +117,11 @@ public class Map {
         tiles.get(r).set(q + (r+1)/2, tile);
     }
 
+    static Point hexCoordsToArrIndices(int q, int r) {
+        int t = (r+1)/2;
+        return new Point(r, q + t);
+    }
+
     static Tile arrIndeciesToTile(int i, int j) {
         return new Tile(j - (i+1)/2, i);
     }

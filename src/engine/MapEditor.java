@@ -1,5 +1,6 @@
 package engine;
 
+import application.Logger;
 import javafx.scene.image.ImageView;
 import view.ImageProvider;
 
@@ -8,8 +9,12 @@ import java.util.List;
 
 public class MapEditor {
 
+    private static double HEX_WIDTH_SIZE = 65/Math.sqrt(3);
+    private static double HEX_HEIGHT_SIZE = 31.5;
+
     private ImageProvider provider;
-    private Layout layout;
+    private Layout offsetLayout;
+    private Layout hexLayout;
     private Tile lastSelectedTile;
     private ImageView selection;
     private List<List<ImageView>> imageViews;
@@ -21,7 +26,8 @@ public class MapEditor {
     public MapEditor(ImageProvider provider) {
 
         this.provider = provider;
-        layout = new Layout(Layout.pointy, new Point(37.53, 31.5), new Point(-31.5, -31.5));
+        offsetLayout = new Layout(Layout.pointy, new Point(HEX_WIDTH_SIZE, HEX_HEIGHT_SIZE), new Point(-HEX_HEIGHT_SIZE, -HEX_HEIGHT_SIZE));
+        hexLayout = new Layout(Layout.pointy, new Point(HEX_WIDTH_SIZE, HEX_HEIGHT_SIZE), new Point(0, 0));
         init2dArrays();
         Map.createMap(tiles, imageViews, MapShape.HEXAGON);
         refreshImageViews(tiles);
@@ -74,7 +80,7 @@ public class MapEditor {
     private ImageView createImageView(Tile t) {
         ImageView imageView = new ImageView();
         imageView.setImage(provider.getImage(t.getType()));
-        Point p = layout.hexToPixel(t);
+        Point p = offsetLayout.hexToPixel(t);
         imageView.setLayoutX(p.x);
         imageView.setLayoutY(p.y);
         return imageView;
@@ -95,48 +101,30 @@ public class MapEditor {
     public void moved(double x, double y) {
         if (selection == null)
             return;
-        Layout layout1 = new Layout(Layout.pointy, new Point(37.53, 31.5), new Point(-0, -0));
-        Tile selectedTile = new Tile(layout1.pixelToHex(new Point(x, y)).hexRound());
-        Point p = layout.hexToPixel(selectedTile);
+
+        Tile selectedTile = new Tile(hexLayout.pixelToHex(new Point(x, y)).hexRound());
+        if(outOfBounds(selectedTile))
+            return;
+        Point p = offsetLayout.hexToPixel(selectedTile);
 //        LogManager.getRootLogger().info(selectedTile.q + " " + selectedTile.r);
         selection.setLayoutX(p.x);
         selection.setLayoutY(p.y);
     }
 
     public void leftClicked(double x, double y) {
-        Layout layout1 = new Layout(Layout.pointy, new Point(37.53, 31.5), new Point(-0, -0));
-        Hex selectedTile = layout1.pixelToHex(new Point(x, y)).hexRound();
-
-        int q = selectedTile.q;
-        int r = selectedTile.r;
-
-        Map.getTile(tiles, q, r).setType("empty");
-        Map.getTile(tiles, q, r).setAccess(false);
-        Map.getImageView(imageViews, q, r).setImage(provider.getImage("empty"));
-
-    }
-
-    public void rightClicked(double x, double y) {
-
-    }
-
-    public void dragged(double x, double y) {
         if (selection == null)
             return;
-        Layout layout1 = new Layout(Layout.pointy, new Point(37.53, 31.5), new Point(-0, -0));
-        Tile selectedTile = new Tile(layout1.pixelToHex(new Point(x, y)).hexRound());
-        Point p = layout.hexToPixel(selectedTile);
+        Tile selectedTile = new Tile(hexLayout.pixelToHex(new Point(x, y)).hexRound());
+        if (outOfBounds(selectedTile))
+            return;
+        Point p = offsetLayout.hexToPixel(selectedTile);
 
         int q = selectedTile.q;
         int r = selectedTile.r;
-
-//        System.out.println(selectedTile.r + " " + selectedTile.q + " " + floorMod(selectedTile.r, Map.SCR_TILEWIDTH) + " " + floorMod(selectedTile.q, Map.SCR_TILEHEIGHT));
-//        System.out.println(floorMod(1, 2));
 
         Map.getTile(tiles, q, r).setType("tileMagic");
         Map.getTile(tiles, q, r).setAccess(true);
         Map.getImageView(imageViews, q, r).setImage(provider.getImage("tileMagic"));
-    //}
 
 
         selection.setLayoutX(p.x);
@@ -144,15 +132,26 @@ public class MapEditor {
 
     }
 
-    private boolean isAccessible(Hex h){
+    public void rightClicked(double x, double y) {
+        Hex selectedTile = hexLayout.pixelToHex(new Point(x, y)).hexRound();
+        if (outOfBounds(selectedTile))
+            return;
+        int q = selectedTile.q;
+        int r = selectedTile.r;
 
-        return notOutOfBounds(h) &&
-                tiles.get(h.r).get(h.q).isAccessible();
+        Map.getTile(tiles, q, r).setType("empty");
+        Map.getTile(tiles, q, r).setAccess(false);
+        Map.getImageView(imageViews, q, r).setImage(provider.getImage("empty"));
     }
 
-    private boolean notOutOfBounds(Hex h){
+//    public void dragged(double x, double y) {
+//        leftClicked(x, y);
+//    }
 
-        return 2 <= h.r && h.r < Map.SCR_TILEWIDTH-2 && 2 <= h.q && h.q < Map.SCR_TILEHEIGHT-2;
+    private boolean outOfBounds(Hex h){
+        Point p = Map.hexCoordsToArrIndices(h.q, h.r);
+
+        return 1 > p.x || p.x >= Map.SCR_TILEHEIGHT-2 || 2 > p.y || p.y >= Map.SCR_TILEWIDTH-2;
     }
 
 
