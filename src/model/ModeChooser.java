@@ -6,7 +6,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 
 
-
 public class ModeChooser extends VBox {
 
     private ImageView circleImage;

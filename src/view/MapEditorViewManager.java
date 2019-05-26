@@ -10,9 +10,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import model.GameMenuSubScene;
-import model.InstrumentPanel;
-import model.MenuButton;
+import model.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -181,7 +179,7 @@ public class MapEditorViewManager {
                     isMouseOnTopRightEdge = false;
                 }
 
-                editor.moved(mouseEvent.getSceneX(), mouseEvent.getSceneY());
+                editor.moved(instrumentPanel.getCurrentInstrumetStyle(), mouseEvent.getSceneX(), mouseEvent.getSceneY());
             }
         });
 
@@ -191,9 +189,9 @@ public class MapEditorViewManager {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 if (mouseEvent.getButton() == MouseButton.PRIMARY)
-                    editor.leftClicked(mouseEvent.getSceneX(), mouseEvent.getSceneY());
+                    editor.leftClicked(instrumentPanel.getCurrentInstrumetStyle(), mouseEvent.getSceneX(), mouseEvent.getSceneY());
                 if (mouseEvent.getButton() == MouseButton.SECONDARY)
-                    editor.rightClicked(mouseEvent.getSceneX(), mouseEvent.getSceneY());
+                    editor.rightClicked(instrumentPanel.getCurrentInstrumetStyle(), mouseEvent.getSceneX(), mouseEvent.getSceneY());
             }
         });
 
@@ -201,9 +199,9 @@ public class MapEditorViewManager {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 if (mouseEvent.getButton() == MouseButton.PRIMARY)
-                    editor.leftClicked(mouseEvent.getSceneX(), mouseEvent.getSceneY());
+                    editor.leftClicked(instrumentPanel.getCurrentInstrumetStyle(), mouseEvent.getSceneX(), mouseEvent.getSceneY());
                 else if (mouseEvent.getButton() == MouseButton.SECONDARY)
-                    editor.rightClicked(mouseEvent.getSceneX(), mouseEvent.getSceneY());
+                    editor.rightClicked(instrumentPanel.getCurrentInstrumetStyle(), mouseEvent.getSceneX(), mouseEvent.getSceneY());
             }
         });
 
@@ -231,10 +229,11 @@ public class MapEditorViewManager {
         addAllImageViews(editor);
 
         editorPane.getChildren().add(editor.getSelectedTile());
+        editor.getSelectedTile().managedProperty().bind(editor.getSelectedTile().visibleProperty());
         createInstrumentPanel();
         createOptionsSubScene();
 
-        createSessionLoop();
+        //createSessionLoop();
         editorStage.show();
     }
 
@@ -243,8 +242,25 @@ public class MapEditorViewManager {
         instrumentPanel.setVisible(true);
         instrumentPanel.setLayoutX(10);
         instrumentPanel.setLayoutY(100);
-        instrumentPanel.setPrefSize(46, 100);
+        instrumentPanel.setPrefSize(46, 500);
+        createTools();
         editorPane.getChildren().add(instrumentPanel);
+    }
+
+    private void createTools() {
+        createSelectTool();
+    }
+
+    private void createSelectTool() {
+        ExpandableInstrumentButton select = new ExpandableInstrumentButton(INSTRUMENT.SELECT);
+        instrumentPanel.addInstrument(select);
+
+        select.getCurrentInstrument().setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                instrumentPanel.setSelectedInstrument(select);
+            }
+        });
     }
 
 
