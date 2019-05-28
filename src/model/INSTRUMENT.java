@@ -7,7 +7,7 @@ public enum INSTRUMENT {
 
     TILE("/view/resources/modeChoser/editorMod.png"),
 
-    ERASER("");
+    ERASER("model/resources/Editing-Eraser-icon-small.png");
 
 
 

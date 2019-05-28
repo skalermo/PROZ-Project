@@ -15,10 +15,11 @@ public class InstrumentPanel extends VBox {
     public InstrumentPanel() {
         instrumentList = new ArrayList<>();
         selectedInstrument = null;
-        currentInstrumentStyle = INSTRUMENT.NONE;
+        currentInstrumentStyle = INSTRUMENT.SELECT;
         this.setVisible(true);
         this.setAlignment(Pos.BASELINE_CENTER);
         this.setStyle(BACKGROUND_STYLE);
+        this.setSpacing(10);
     }
 
     public ExpandableInstrumentButton getSelectedInstrument() {

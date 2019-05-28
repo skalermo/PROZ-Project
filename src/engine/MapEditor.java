@@ -100,20 +100,32 @@ public class MapEditor {
     }
 
     public void moved(INSTRUMENT instrument, double x, double y) {
+        Tile selectedTile = new Tile(hexLayout.pixelToHex(new Point(x, y)).hexRound());
+        Point p = offsetLayout.hexToPixel(selectedTile);
         switch (instrument) {
             case NONE:
                 return;
 
             case SELECT:
                 selection.setVisible(true);
-                Tile selectedTile = new Tile(hexLayout.pixelToHex(new Point(x, y)).hexRound());
                 if(outOfBounds(selectedTile))
                     return;
-                Point p = offsetLayout.hexToPixel(selectedTile);
-//        LogManager.getRootLogger().info(selectedTile.q + " " + selectedTile.r);
+
                 selection.setLayoutX(p.x);
                 selection.setLayoutY(p.y);
                 break;
+
+            case ERASER:
+                selection.setVisible(true);
+                if (outOfBounds(selectedTile))
+                    return;
+
+                selection.setLayoutX(p.x);
+                selection.setLayoutY(p.y);
+                break;
+
+
+
         }
 
 //        Tile selectedTile = new Tile(hexLayout.pixelToHex(new Point(x, y)).hexRound());
@@ -126,23 +138,43 @@ public class MapEditor {
     }
 
     public void leftClicked(INSTRUMENT instrument, double x, double y) {
-        if (selection == null)
-            return;
         Tile selectedTile = new Tile(hexLayout.pixelToHex(new Point(x, y)).hexRound());
-        if (outOfBounds(selectedTile))
-            return;
         Point p = offsetLayout.hexToPixel(selectedTile);
+        switch (instrument) {
+            case NONE:
+                return;
 
-        int q = selectedTile.q;
-        int r = selectedTile.r;
+            case ERASER:
+                selection.setVisible(true);
+                if (outOfBounds(selectedTile))
+                    return;
 
-        Map.getTile(tiles, q, r).setType("tileMagic");
-        Map.getTile(tiles, q, r).setAccess(true);
-        Map.getImageView(imageViews, q, r).setImage(provider.getImage("tileMagic"));
-
-
-        selection.setLayoutX(p.x);
-        selection.setLayoutY(p.y);
+                int q = selectedTile.q;
+                int r = selectedTile.r;
+                Map.getTile(tiles, q, r).setAccess(false);
+                Map.getTile(tiles, q, r).setType("empty");
+                Map.getImageView(imageViews, q, r).setImage(provider.getImage("empty"));
+                selection.setLayoutX(p.x);
+                selection.setLayoutY(p.y);
+                break;
+        }
+//        if (selection == null)
+//            return;
+//        Tile selectedTile = new Tile(hexLayout.pixelToHex(new Point(x, y)).hexRound());
+//        if (outOfBounds(selectedTile))
+//            return;
+//        Point p = offsetLayout.hexToPixel(selectedTile);
+//
+//        int q = selectedTile.q;
+//        int r = selectedTile.r;
+//
+//        Map.getTile(tiles, q, r).setType("tileMagic");
+//        Map.getTile(tiles, q, r).setAccess(true);
+//        Map.getImageView(imageViews, q, r).setImage(provider.getImage("tileMagic"));
+//
+//
+//        selection.setLayoutX(p.x);
+//        selection.setLayoutY(p.y);
 
     }
 

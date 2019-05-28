@@ -249,6 +249,7 @@ public class MapEditorViewManager {
 
     private void createTools() {
         createSelectTool();
+        createEraserTool();
     }
 
     private void createSelectTool() {
@@ -259,6 +260,18 @@ public class MapEditorViewManager {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 instrumentPanel.setSelectedInstrument(select);
+            }
+        });
+    }
+
+    private void createEraserTool() {
+        ExpandableInstrumentButton eraser = new ExpandableInstrumentButton(INSTRUMENT.ERASER);
+        instrumentPanel.addInstrument(eraser);
+
+        eraser.getCurrentInstrument().setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                instrumentPanel.setSelectedInstrument(eraser);
             }
         });
     }

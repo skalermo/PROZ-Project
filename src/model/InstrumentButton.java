@@ -12,6 +12,7 @@ public class InstrumentButton extends Button {
     public InstrumentButton(INSTRUMENT instrument) {
         instrumentStyle = instrument;
         setMinSize(32, 32);
+        setPrefSize(32, 32);
         createBackgroundStyle(instrument);
         initializeButtonListeners();
 
