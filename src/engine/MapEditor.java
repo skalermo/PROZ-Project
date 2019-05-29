@@ -99,7 +99,9 @@ public class MapEditor {
         return selection;
     }
 
-    public void moved(INSTRUMENT instrument, double x, double y) {
+    public void moved(INSTRUMENT instrument, double x, double y, boolean blocked) {
+        if (blocked)
+            return;
         Tile selectedTile = new Tile(hexLayout.pixelToHex(new Point(x, y)).hexRound());
         Point p = offsetLayout.hexToPixel(selectedTile);
         switch (instrument) {
@@ -107,6 +109,15 @@ public class MapEditor {
                 return;
 
             case SELECT:
+
+
+            case ERASER:
+
+
+            case TILEGRASS:
+
+
+            case TILEGRASS_TILE:
                 selection.setVisible(true);
                 if(outOfBounds(selectedTile))
                     return;
@@ -115,14 +126,6 @@ public class MapEditor {
                 selection.setLayoutY(p.y);
                 break;
 
-            case ERASER:
-                selection.setVisible(true);
-                if (outOfBounds(selectedTile))
-                    return;
-
-                selection.setLayoutX(p.x);
-                selection.setLayoutY(p.y);
-                break;
 
 
 
@@ -137,9 +140,12 @@ public class MapEditor {
 //        selection.setLayoutY(p.y);
     }
 
-    public void leftClicked(INSTRUMENT instrument, double x, double y) {
+    public void leftClicked(INSTRUMENT instrument, double x, double y, boolean blocked) {
+        if (blocked)
+            return;
         Tile selectedTile = new Tile(hexLayout.pixelToHex(new Point(x, y)).hexRound());
         Point p = offsetLayout.hexToPixel(selectedTile);
+        int q, r;
         switch (instrument) {
             case NONE:
                 return;
@@ -149,14 +155,43 @@ public class MapEditor {
                 if (outOfBounds(selectedTile))
                     return;
 
-                int q = selectedTile.q;
-                int r = selectedTile.r;
+                q = selectedTile.q;
+                r = selectedTile.r;
                 Map.getTile(tiles, q, r).setAccess(false);
                 Map.getTile(tiles, q, r).setType("empty");
                 Map.getImageView(imageViews, q, r).setImage(provider.getImage("empty"));
                 selection.setLayoutX(p.x);
                 selection.setLayoutY(p.y);
                 break;
+
+            case TILEGRASS:
+                selection.setVisible(true);
+                if (outOfBounds(selectedTile))
+                    return;
+
+                q = selectedTile.q;
+                r = selectedTile.r;
+                Map.getTile(tiles, q, r).setAccess(true);
+                Map.getTile(tiles, q, r).setType("tileGrass");
+                Map.getImageView(imageViews, q, r).setImage(provider.getImage("tileGrass"));
+                selection.setLayoutX(p.x);
+                selection.setLayoutY(p.y);
+                break;
+
+            case TILEGRASS_TILE:
+                selection.setVisible(true);
+                if (outOfBounds(selectedTile))
+                    return;
+
+                q = selectedTile.q;
+                r = selectedTile.r;
+                Map.getTile(tiles, q, r).setAccess(true);
+                Map.getTile(tiles, q, r).setType("tileGrass_tile");
+                Map.getImageView(imageViews, q, r).setImage(provider.getImage("tileGrass_tile"));
+                selection.setLayoutX(p.x);
+                selection.setLayoutY(p.y);
+                break;
+
         }
 //        if (selection == null)
 //            return;
@@ -178,7 +213,9 @@ public class MapEditor {
 
     }
 
-    public void rightClicked(INSTRUMENT instrument, double x, double y) {
+    public void rightClicked(INSTRUMENT instrument, double x, double y, boolean blocked) {
+        if (blocked)
+            return;
         Hex selectedTile = hexLayout.pixelToHex(new Point(x, y)).hexRound();
         if (outOfBounds(selectedTile))
             return;
