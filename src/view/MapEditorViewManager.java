@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
 import model.*;
 
@@ -39,6 +40,7 @@ public class MapEditorViewManager {
     private AnimationTimer editorTimer;
 
     private boolean isMouseOnTopRightEdge = false;
+    private boolean isDrawingBlocked = false;
 
     public MapEditorViewManager(){
 
@@ -50,17 +52,27 @@ public class MapEditorViewManager {
 
     }
 
+    public void blockDrawing() {
+        isDrawingBlocked = true;
+    }
+
+    public void allowDrawing() {
+        isDrawingBlocked = false;
+    }
+
 
     private void showSubScene(GameMenuSubScene subScene) {
 
         if (subScene.equals(sceneToHide)) {
             subScene.moveSubScene();
             sceneToHide = null;
+            isDrawingBlocked = false;
             return;
         }
 
         subScene.moveSubScene();
         sceneToHide = subScene;
+        isDrawingBlocked = true;
     }
 
     private void createOptionsSubScene() {
@@ -179,19 +191,19 @@ public class MapEditorViewManager {
                     isMouseOnTopRightEdge = false;
                 }
 
-                editor.moved(instrumentPanel.getCurrentInstrumetStyle(), mouseEvent.getSceneX(), mouseEvent.getSceneY());
+                editor.moved(instrumentPanel.getCurrentInstrumentStyle(), mouseEvent.getSceneX(), mouseEvent.getSceneY(), isDrawingBlocked);
             }
         });
 
 
 
-        editorScene.setOnMouseClicked(new EventHandler<MouseEvent>() {
+        editorScene.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 if (mouseEvent.getButton() == MouseButton.PRIMARY)
-                    editor.leftClicked(instrumentPanel.getCurrentInstrumetStyle(), mouseEvent.getSceneX(), mouseEvent.getSceneY());
+                    editor.leftClicked(instrumentPanel.getCurrentInstrumentStyle(), mouseEvent.getSceneX(), mouseEvent.getSceneY(), isDrawingBlocked);
                 if (mouseEvent.getButton() == MouseButton.SECONDARY)
-                    editor.rightClicked(instrumentPanel.getCurrentInstrumetStyle(), mouseEvent.getSceneX(), mouseEvent.getSceneY());
+                    editor.rightClicked(instrumentPanel.getCurrentInstrumentStyle(), mouseEvent.getSceneX(), mouseEvent.getSceneY(), isDrawingBlocked);
             }
         });
 
@@ -199,9 +211,9 @@ public class MapEditorViewManager {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 if (mouseEvent.getButton() == MouseButton.PRIMARY)
-                    editor.leftClicked(instrumentPanel.getCurrentInstrumetStyle(), mouseEvent.getSceneX(), mouseEvent.getSceneY());
+                    editor.leftClicked(instrumentPanel.getCurrentInstrumentStyle(), mouseEvent.getSceneX(), mouseEvent.getSceneY(), isDrawingBlocked);
                 else if (mouseEvent.getButton() == MouseButton.SECONDARY)
-                    editor.rightClicked(instrumentPanel.getCurrentInstrumetStyle(), mouseEvent.getSceneX(), mouseEvent.getSceneY());
+                    editor.rightClicked(instrumentPanel.getCurrentInstrumentStyle(), mouseEvent.getSceneX(), mouseEvent.getSceneY(), isDrawingBlocked);
             }
         });
 
@@ -250,30 +262,60 @@ public class MapEditorViewManager {
     private void createTools() {
         createSelectTool();
         createEraserTool();
+        createTileTool();
     }
 
     private void createSelectTool() {
-        ExpandableInstrumentButton select = new ExpandableInstrumentButton(INSTRUMENT.SELECT);
+        ExpandableInstrumentButton select = new ExpandableInstrumentButton(INSTRUMENT.SELECT, null, instrumentPanel);
         instrumentPanel.addInstrument(select);
 
-        select.getCurrentInstrument().setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                instrumentPanel.setSelectedInstrument(select);
-            }
-        });
+//        select.getCurrentInstrument().setOnMouseClicked(new EventHandler<MouseEvent>() {
+//            @Override
+//            public void handle(MouseEvent mouseEvent) {
+//                instrumentPanel.setSelectedInstrument(select.getCurrentInstrumentStyle());
+//            }
+//        });
     }
 
     private void createEraserTool() {
-        ExpandableInstrumentButton eraser = new ExpandableInstrumentButton(INSTRUMENT.ERASER);
+        ExpandableInstrumentButton eraser = new ExpandableInstrumentButton(INSTRUMENT.ERASER, null, instrumentPanel);
         instrumentPanel.addInstrument(eraser);
 
-        eraser.getCurrentInstrument().setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                instrumentPanel.setSelectedInstrument(eraser);
-            }
-        });
+//        eraser.getCurrentInstrument().setOnMouseClicked(new EventHandler<MouseEvent>() {
+//            @Override
+//            public void handle(MouseEvent mouseEvent) {
+//                instrumentPanel.setSelectedInstrument(eraser.getCurrentInstrumentStyle());
+//            }
+//        });
+    }
+
+    private void createTileTool() {
+
+        FlowPane relatedInstrumentsPane = createRelatedInstruments();
+        ExpandableInstrumentButton tile = new ExpandableInstrumentButton(INSTRUMENT.TILEGRASS, relatedInstrumentsPane, instrumentPanel);
+        instrumentPanel.addInstrument(tile);
+        relatedInstrumentsPane.setLayoutX(instrumentPanel.getLayoutX());
+        relatedInstrumentsPane.setLayoutY(instrumentPanel.getLayoutY());
+        tile.addRelated(new InstrumentButton(INSTRUMENT.TILEGRASS, instrumentPanel, tile));
+        tile.addRelated(new InstrumentButton(INSTRUMENT.TILEGRASS_TILE, instrumentPanel, tile));
+
+//        tile.getCurrentInstrument().setOnMouseClicked(new EventHandler<MouseEvent>() {
+//            @Override
+//            public void handle(MouseEvent mouseEvent) {
+//                instrumentPanel.setSelectedInstrument(tile.getCurrentInstrumentStyle());
+//            }
+//        });
+    }
+
+    private FlowPane createRelatedInstruments() {
+        FlowPane relatedInstrumentsPane = new FlowPane();
+        final String BACKGROUND_STYLE = "-fx-background-color: rgba(215, 215, 215, 0.85)";
+        relatedInstrumentsPane.setStyle(BACKGROUND_STYLE);
+        relatedInstrumentsPane.setHgap(10);
+        relatedInstrumentsPane.setVgap(5);
+        relatedInstrumentsPane.setVisible(false);
+        editorPane.getChildren().add(relatedInstrumentsPane);
+        return relatedInstrumentsPane;
     }
 
 

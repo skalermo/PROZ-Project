@@ -5,7 +5,9 @@ public enum INSTRUMENT {
 
     SELECT("/model/resources/Path-selection-tool.png"),
 
-    TILE("/view/resources/modeChoser/editorMod.png"),
+    TILEGRASS_TILE("/view/resources/Tiles/tileGrass_tile.png"),
+
+    TILEGRASS("/view/resources/Tiles/tileGrass.png"),
 
     ERASER("model/resources/Editing-Eraser-icon-small.png");
 
