@@ -5,6 +5,7 @@ import engine.MapEditor;
 import javafx.animation.AnimationTimer;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
@@ -297,7 +298,20 @@ public class MapEditorViewManager {
         relatedInstrumentsPane.setLayoutX(instrumentPanel.getLayoutX());
         relatedInstrumentsPane.setLayoutY(instrumentPanel.getLayoutY());
         tile.addRelated(new InstrumentButton(INSTRUMENT.TILEGRASS, instrumentPanel, tile));
-        tile.addRelated(new InstrumentButton(INSTRUMENT.TILEGRASS_TILE, instrumentPanel, tile));
+        tile.addRelated(new InstrumentButton(INSTRUMENT.TILEGRASS_FULL, instrumentPanel, tile));
+        tile.addRelated(new InstrumentButton(INSTRUMENT.TILEMAGIC, instrumentPanel, tile));
+        tile.addRelated(new InstrumentButton(INSTRUMENT.TILEMAGIC_FULL, instrumentPanel, tile));
+        tile.addRelated(new InstrumentButton(INSTRUMENT.TILEDIRT, instrumentPanel, tile));
+        tile.addRelated(new InstrumentButton(INSTRUMENT.TILEDIRT_FULL, instrumentPanel, tile));
+        tile.addRelated(new InstrumentButton(INSTRUMENT.TILEWATER, instrumentPanel, tile));
+        tile.addRelated(new InstrumentButton(INSTRUMENT.TILEWATER_FULL, instrumentPanel, tile));
+        tile.addRelated(new InstrumentButton(INSTRUMENT.TILESTONE, instrumentPanel, tile));
+        tile.addRelated(new InstrumentButton(INSTRUMENT.TILESTONE_FULL, instrumentPanel, tile));
+        tile.addRelated(new InstrumentButton(INSTRUMENT.TILEAUTUMN, instrumentPanel, tile));
+        tile.addRelated(new InstrumentButton(INSTRUMENT.TILEAUTUMN_FULL, instrumentPanel, tile));
+        tile.addRelated(new InstrumentButton(INSTRUMENT.TILELAVA, instrumentPanel, tile));
+        tile.addRelated(new InstrumentButton(INSTRUMENT.TILELAVA_FULL, instrumentPanel, tile));
+
 
 //        tile.getCurrentInstrument().setOnMouseClicked(new EventHandler<MouseEvent>() {
 //            @Override
@@ -311,8 +325,10 @@ public class MapEditorViewManager {
         FlowPane relatedInstrumentsPane = new FlowPane();
         final String BACKGROUND_STYLE = "-fx-background-color: rgba(215, 215, 215, 0.85)";
         relatedInstrumentsPane.setStyle(BACKGROUND_STYLE);
-        relatedInstrumentsPane.setHgap(10);
+        relatedInstrumentsPane.setHgap(5);
         relatedInstrumentsPane.setVgap(5);
+        relatedInstrumentsPane.setAlignment(Pos.CENTER);
+        relatedInstrumentsPane.setMinWidth(80);
         relatedInstrumentsPane.setVisible(false);
         editorPane.getChildren().add(relatedInstrumentsPane);
         return relatedInstrumentsPane;

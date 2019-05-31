@@ -109,15 +109,19 @@ public class MapEditor {
                 return;
 
             case SELECT:
-
-
             case ERASER:
-
-
             case TILEGRASS:
-
-
-            case TILEGRASS_TILE:
+            case TILEGRASS_FULL:
+            case TILEMAGIC:
+            case TILEMAGIC_FULL:
+            case TILEDIRT:
+            case TILEDIRT_FULL:
+            case TILEWATER:
+            case TILEWATER_FULL:
+            case TILESTONE:
+            case TILESTONE_FULL:
+            case TILEAUTUMN:
+            case TILEAUTUMN_FULL:
                 selection.setVisible(true);
                 if(outOfBounds(selectedTile))
                     return;
@@ -178,7 +182,7 @@ public class MapEditor {
                 selection.setLayoutY(p.y);
                 break;
 
-            case TILEGRASS_TILE:
+            case TILEGRASS_FULL:
                 selection.setVisible(true);
                 if (outOfBounds(selectedTile))
                     return;
@@ -186,8 +190,176 @@ public class MapEditor {
                 q = selectedTile.q;
                 r = selectedTile.r;
                 Map.getTile(tiles, q, r).setAccess(true);
-                Map.getTile(tiles, q, r).setType("tileGrass_tile");
-                Map.getImageView(imageViews, q, r).setImage(provider.getImage("tileGrass_tile"));
+                Map.getTile(tiles, q, r).setType("tileGrass_full");
+                Map.getImageView(imageViews, q, r).setImage(provider.getImage("tileGrass_full"));
+                selection.setLayoutX(p.x);
+                selection.setLayoutY(p.y);
+                break;
+
+            case TILEMAGIC:
+                selection.setVisible(true);
+                if (outOfBounds(selectedTile))
+                    return;
+
+                q = selectedTile.q;
+                r = selectedTile.r;
+                Map.getTile(tiles, q, r).setAccess(true);
+                Map.getTile(tiles, q, r).setType("tileMagic");
+                Map.getImageView(imageViews, q, r).setImage(provider.getImage("tileMagic"));
+                selection.setLayoutX(p.x);
+                selection.setLayoutY(p.y);
+                break;
+
+            case TILEMAGIC_FULL:
+                selection.setVisible(true);
+                if (outOfBounds(selectedTile))
+                    return;
+
+                q = selectedTile.q;
+                r = selectedTile.r;
+                Map.getTile(tiles, q, r).setAccess(true);
+                Map.getTile(tiles, q, r).setType("tileMagic_full");
+                Map.getImageView(imageViews, q, r).setImage(provider.getImage("tileMagic_full"));
+                selection.setLayoutX(p.x);
+                selection.setLayoutY(p.y);
+                break;
+
+            case TILEDIRT:
+                selection.setVisible(true);
+                if (outOfBounds(selectedTile))
+                    return;
+
+                q = selectedTile.q;
+                r = selectedTile.r;
+                Map.getTile(tiles, q, r).setAccess(true);
+                Map.getTile(tiles, q, r).setType("tileDirt");
+                Map.getImageView(imageViews, q, r).setImage(provider.getImage("tileDirt"));
+                selection.setLayoutX(p.x);
+                selection.setLayoutY(p.y);
+                break;
+
+            case TILEDIRT_FULL:
+                selection.setVisible(true);
+                if (outOfBounds(selectedTile))
+                    return;
+
+                q = selectedTile.q;
+                r = selectedTile.r;
+                Map.getTile(tiles, q, r).setAccess(true);
+                Map.getTile(tiles, q, r).setType("tileDirt_full");
+                Map.getImageView(imageViews, q, r).setImage(provider.getImage("tileDirt_full"));
+                selection.setLayoutX(p.x);
+                selection.setLayoutY(p.y);
+                break;
+
+            case TILEWATER:
+                selection.setVisible(true);
+                if (outOfBounds(selectedTile))
+                    return;
+
+                q = selectedTile.q;
+                r = selectedTile.r;
+                Map.getTile(tiles, q, r).setAccess(true);
+                Map.getTile(tiles, q, r).setType("tileWater");
+                Map.getImageView(imageViews, q, r).setImage(provider.getImage("tileWater"));
+                selection.setLayoutX(p.x);
+                selection.setLayoutY(p.y);
+                break;
+
+            case TILEWATER_FULL:
+                selection.setVisible(true);
+                if (outOfBounds(selectedTile))
+                    return;
+
+                q = selectedTile.q;
+                r = selectedTile.r;
+                Map.getTile(tiles, q, r).setAccess(true);
+                Map.getTile(tiles, q, r).setType("tileWater_full");
+                Map.getImageView(imageViews, q, r).setImage(provider.getImage("tileWater_full"));
+                selection.setLayoutX(p.x);
+                selection.setLayoutY(p.y);
+                break;
+
+            case TILESTONE:
+                selection.setVisible(true);
+                if (outOfBounds(selectedTile))
+                    return;
+
+                q = selectedTile.q;
+                r = selectedTile.r;
+                Map.getTile(tiles, q, r).setAccess(true);
+                Map.getTile(tiles, q, r).setType("tileStone");
+                Map.getImageView(imageViews, q, r).setImage(provider.getImage("tileStone"));
+                selection.setLayoutX(p.x);
+                selection.setLayoutY(p.y);
+                break;
+
+            case TILESTONE_FULL:
+                selection.setVisible(true);
+                if (outOfBounds(selectedTile))
+                    return;
+
+                q = selectedTile.q;
+                r = selectedTile.r;
+                Map.getTile(tiles, q, r).setAccess(true);
+                Map.getTile(tiles, q, r).setType("tileStone_full");
+                Map.getImageView(imageViews, q, r).setImage(provider.getImage("tileStone_full"));
+                selection.setLayoutX(p.x);
+                selection.setLayoutY(p.y);
+                break;
+
+            case TILEAUTUMN:
+                selection.setVisible(true);
+                if (outOfBounds(selectedTile))
+                    return;
+
+                q = selectedTile.q;
+                r = selectedTile.r;
+                Map.getTile(tiles, q, r).setAccess(true);
+                Map.getTile(tiles, q, r).setType("tileAutumn");
+                Map.getImageView(imageViews, q, r).setImage(provider.getImage("tileAutumn"));
+                selection.setLayoutX(p.x);
+                selection.setLayoutY(p.y);
+                break;
+
+            case TILEAUTUMN_FULL:
+                selection.setVisible(true);
+                if (outOfBounds(selectedTile))
+                    return;
+
+                q = selectedTile.q;
+                r = selectedTile.r;
+                Map.getTile(tiles, q, r).setAccess(true);
+                Map.getTile(tiles, q, r).setType("tileAutumn_full");
+                Map.getImageView(imageViews, q, r).setImage(provider.getImage("tileAutumn_full"));
+                selection.setLayoutX(p.x);
+                selection.setLayoutY(p.y);
+                break;
+
+            case TILELAVA:
+                selection.setVisible(true);
+                if (outOfBounds(selectedTile))
+                    return;
+
+                q = selectedTile.q;
+                r = selectedTile.r;
+                Map.getTile(tiles, q, r).setAccess(true);
+                Map.getTile(tiles, q, r).setType("tileLava");
+                Map.getImageView(imageViews, q, r).setImage(provider.getImage("tileLava"));
+                selection.setLayoutX(p.x);
+                selection.setLayoutY(p.y);
+                break;
+
+            case TILELAVA_FULL:
+                selection.setVisible(true);
+                if (outOfBounds(selectedTile))
+                    return;
+
+                q = selectedTile.q;
+                r = selectedTile.r;
+                Map.getTile(tiles, q, r).setAccess(true);
+                Map.getTile(tiles, q, r).setType("tileLava_full");
+                Map.getImageView(imageViews, q, r).setImage(provider.getImage("tileLava_full"));
                 selection.setLayoutX(p.x);
                 selection.setLayoutY(p.y);
                 break;
