@@ -242,7 +242,7 @@ public class MapEditorViewManager {
         addAllImageViews(editor);
 
         editorPane.getChildren().add(editor.getSelectedTile());
-        editor.getSelectedTile().managedProperty().bind(editor.getSelectedTile().visibleProperty());
+//        editor.getSelectedTile().managedProperty().bind(editor.getSelectedTile().visibleProperty());
         createInstrumentPanel();
         createOptionsSubScene();
 
@@ -337,9 +337,10 @@ public class MapEditorViewManager {
 
 
     private void addAllImageViews(MapEditor editor){
-        for (List<ImageView> imageViews: editor.getImageViews())
-            for (ImageView imageView: imageViews)
-                editorPane.getChildren().add(imageView);
+        for (List<List<ImageView>> ivvv: editor.getImageViews())
+            for (List<ImageView> ivv: ivvv)
+                for (ImageView iv: ivv)
+                editorPane.getChildren().add(iv);
     }
 
     private void createSessionLoop(){

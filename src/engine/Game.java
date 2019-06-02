@@ -21,7 +21,7 @@ public class Game {
         this.provider = provider;
         init2dArrays();
         layout = new Layout(Layout.pointy, new Point(37.53, 31.5), new Point(-32, -32)); //37, 32
-        Map.createMap(tiles, imageViews, MapShape.HEXAGON);
+        Map.createMap(tiles, MapShape.HEXAGON);
         createImageViews();
         chara = new Character();
         lastSelectedTile = null;

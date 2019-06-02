@@ -34,7 +34,7 @@ public class Map {
 
 //    static HashMap<Point, Hex> map = new HashMap<>();
 
-    public static void createMap(List<List<Tile>> tiles, List<List<ImageView>> imageViews, MapShape mapShape){
+    public static void createMap(List<List<Tile>> tiles, MapShape mapShape){
         int biom = (int)(random()*3);
         switch (mapShape){
             case HEXAGON:
@@ -84,7 +84,7 @@ public class Map {
 //                }
 //                break;
             default:
-                createMap(tiles, imageViews, MapShape.HEXAGON);
+                createMap(tiles, MapShape.HEXAGON);
 
         }
     }
@@ -93,18 +93,16 @@ public class Map {
     static private void changeTile(Tile tile, int biom){
         switch (biom){
             case 0:
-                tile.setType("tileGrass");
-                tile.setAccess(true);
+                tile.pushTile("tileGrass");
                 break;
 
             case 1:
-                tile.setType("tileWater");
+                tile.pushTile("tileWater");
 
                 break;
 
             case 2:
-                tile.setType("tileSnow");
-                tile.setAccess(true);
+                tile.pushTile("tileSnow");
                 break;
         }
     }
@@ -126,12 +124,12 @@ public class Map {
         return new Tile(j - (i+1)/2, i);
     }
 
-    static ImageView getImageView(List<List<ImageView>> imageViews, int q, int r){
-        return imageViews.get(r).get(q + (r+1)/2);
+    static ImageView getImageView(List<List<List<ImageView>>> imageViews, int q, int r, int h){
+        return imageViews.get(r).get(q + (r+1)/2).get(h);
     }
 
-    static void setImageView(List<List<ImageView>> imageViews, int q, int r, ImageView imageView){
-        imageViews.get(r).set(q + (r+1)/2, imageView);
+    static void setImageView(List<List<List<ImageView>>> imageViews, int q, int r, int h, ImageView imageView){
+        imageViews.get(r).get(q + (r+1)/2).set(h, imageView);
     }
 
 

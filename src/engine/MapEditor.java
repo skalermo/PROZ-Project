@@ -9,6 +9,7 @@ import java.util.List;
 
 public class MapEditor {
 
+    private static double HEX_VERTICAL_OFFSET = 21;
     private static double HEX_WIDTH_SIZE = 65/Math.sqrt(3);
     private static double HEX_HEIGHT_SIZE = 31.5;
 
@@ -17,7 +18,7 @@ public class MapEditor {
     private Layout hexLayout;
     private Tile lastSelectedTile;
     private ImageView selection;
-    private List<List<ImageView>> imageViews;
+    private List<List<List<ImageView>>> imageViews;
     private List<List<Tile>> tiles;
 
     static private int initialStrength;
@@ -28,15 +29,15 @@ public class MapEditor {
         this.provider = provider;
         offsetLayout = new Layout(Layout.pointy, new Point(HEX_WIDTH_SIZE, HEX_HEIGHT_SIZE), new Point(-HEX_HEIGHT_SIZE, -HEX_HEIGHT_SIZE));
         hexLayout = new Layout(Layout.pointy, new Point(HEX_WIDTH_SIZE, HEX_HEIGHT_SIZE), new Point(0, 0));
-        init2dArrays();
-        Map.createMap(tiles, imageViews, MapShape.HEXAGON);
+        initTilesAndViews();
+        Map.createMap(tiles, MapShape.HEXAGON);
         refreshImageViews(tiles);
         lastSelectedTile = null;
         selection = null;
     }
 
 
-    private void init2dArrays() {
+    private void initTilesAndViews() {
         imageViews = new ArrayList<>(Map.SCR_TILEHEIGHT);
         tiles = new ArrayList<>(Map.SCR_TILEHEIGHT);
         for (int i = 0; i < Map.SCR_TILEHEIGHT; i++) {
@@ -45,7 +46,7 @@ public class MapEditor {
             for (int j = 0; j < Map.SCR_TILEWIDTH; j++){
                 Tile t = Map.arrIndeciesToTile(i, j);
                 tiles.get(i).add(j, t);
-                imageViews.get(i).add(j, createImageView(t));
+                imageViews.get(i).add(j, createImageViewColumn(t));
             }
 
         }
@@ -55,7 +56,7 @@ public class MapEditor {
         return tiles;
     }
 
-    public List<List<ImageView>> getImageViews() {
+    public List<List<List<ImageView>>> getImageViews() {
 
         return imageViews;
     }
@@ -70,20 +71,35 @@ public class MapEditor {
     private void refreshImageViews(List<List<Tile>> tiles) {
         for (int i = 0; i < tiles.size(); i++){
             for (int j = 0; j < tiles.get(i).size(); j++){
-                if (imageViews.get(i).get(j) != null && tiles.get(i).get(j) != null)
-                    imageViews.get(i).get(j).setImage(provider.getImage(tiles.get(i).get(j).getType()));
+
+//                if (imageViews.get(i).get(j) != null && tiles.get(i).get(j) != null)
+                int height = tiles.get(i).get(j).getHeightOfTile();
+                if (height < 2)
+                    imageViews.get(i).get(j).get(0).setImage(provider.getImage(tiles.get(i).get(j).getType()));
+                else {
+                    for (int h = 0; h < height - 1; h++) {
+                        imageViews.get(i).get(j).get(h).setImage(provider.getImage(tiles.get(i).get(j).getTypeFromTile(h)));
+                    }
+                    imageViews.get(i).get(j).get(height-1).setImage(provider.getImage(tiles.get(i).get(j).getType()));
+                }
             }
         }
 
     }
 
-    private ImageView createImageView(Tile t) {
-        ImageView imageView = new ImageView();
-        imageView.setImage(provider.getImage(t.getType()));
+    private List<ImageView> createImageViewColumn(Tile t) {
         Point p = offsetLayout.hexToPixel(t);
-        imageView.setLayoutX(p.x);
-        imageView.setLayoutY(p.y);
-        return imageView;
+
+        List<ImageView> imageViews = new ArrayList<>(Tile.MAX_TILE_HEIGHT);
+        for (int i = 0; i < Tile.MAX_TILE_HEIGHT; i++) {
+            ImageView iv = new ImageView();
+            iv.setLayoutX(p.x);
+            iv.setLayoutY(p.y - i * HEX_VERTICAL_OFFSET);
+            iv.setImage(provider.getImage(t.getType()));
+            imageViews.add(iv);
+        }
+
+        return imageViews;
     }
 
     public ImageView getSelectedTile(){
@@ -122,12 +138,15 @@ public class MapEditor {
             case TILESTONE_FULL:
             case TILEAUTUMN:
             case TILEAUTUMN_FULL:
+            case TILELAVA:
+            case TILELAVA_FULL:
                 selection.setVisible(true);
                 if(outOfBounds(selectedTile))
                     return;
 
+                int h = Map.getTile(tiles, selectedTile.q, selectedTile.r).getHeightOfTile() - 1;
                 selection.setLayoutX(p.x);
-                selection.setLayoutY(p.y);
+                selection.setLayoutY(p.y - (h > 0 ? HEX_VERTICAL_OFFSET * h : 0));
                 break;
 
 
@@ -150,6 +169,8 @@ public class MapEditor {
         Tile selectedTile = new Tile(hexLayout.pixelToHex(new Point(x, y)).hexRound());
         Point p = offsetLayout.hexToPixel(selectedTile);
         int q, r;
+
+
         switch (instrument) {
             case NONE:
                 return;
@@ -161,11 +182,9 @@ public class MapEditor {
 
                 q = selectedTile.q;
                 r = selectedTile.r;
-                Map.getTile(tiles, q, r).setAccess(false);
-                Map.getTile(tiles, q, r).setType("empty");
-                Map.getImageView(imageViews, q, r).setImage(provider.getImage("empty"));
-                selection.setLayoutX(p.x);
-                selection.setLayoutY(p.y);
+                Map.getTile(tiles, q, r).popTile();
+                Map.getImageView(imageViews, q, r, Map.getTile(tiles, q, r).getHeightOfTile()).setImage(provider.getImage("empty"));
+
                 break;
 
             case TILEGRASS:
@@ -175,11 +194,9 @@ public class MapEditor {
 
                 q = selectedTile.q;
                 r = selectedTile.r;
-                Map.getTile(tiles, q, r).setAccess(true);
-                Map.getTile(tiles, q, r).setType("tileGrass");
-                Map.getImageView(imageViews, q, r).setImage(provider.getImage("tileGrass"));
-                selection.setLayoutX(p.x);
-                selection.setLayoutY(p.y);
+                Map.getTile(tiles, q, r).pushTile("tileGrass");
+                Map.getImageView(imageViews, q, r, Map.getTile(tiles, q, r).getHeightOfTile() - 1).setImage(provider.getImage("tileGrass"));
+
                 break;
 
             case TILEGRASS_FULL:
@@ -189,13 +206,11 @@ public class MapEditor {
 
                 q = selectedTile.q;
                 r = selectedTile.r;
-                Map.getTile(tiles, q, r).setAccess(true);
-                Map.getTile(tiles, q, r).setType("tileGrass_full");
-                Map.getImageView(imageViews, q, r).setImage(provider.getImage("tileGrass_full"));
-                selection.setLayoutX(p.x);
-                selection.setLayoutY(p.y);
-                break;
+                Map.getTile(tiles, q, r).pushTile("tileGrass_full");
+                Map.getImageView(imageViews, q, r, Map.getTile(tiles, q, r).getHeightOfTile() - 1).setImage(provider.getImage("tileGrass_full"));selection.setLayoutX(p.x);
 
+                break;
+//
             case TILEMAGIC:
                 selection.setVisible(true);
                 if (outOfBounds(selectedTile))
@@ -203,13 +218,11 @@ public class MapEditor {
 
                 q = selectedTile.q;
                 r = selectedTile.r;
-                Map.getTile(tiles, q, r).setAccess(true);
-                Map.getTile(tiles, q, r).setType("tileMagic");
-                Map.getImageView(imageViews, q, r).setImage(provider.getImage("tileMagic"));
-                selection.setLayoutX(p.x);
-                selection.setLayoutY(p.y);
-                break;
+                Map.getTile(tiles, q, r).pushTile("tileMagic");
+                Map.getImageView(imageViews, q, r, Map.getTile(tiles, q, r).getHeightOfTile() - 1).setImage(provider.getImage("tileMagic"));selection.setLayoutX(p.x);
 
+                break;
+//
             case TILEMAGIC_FULL:
                 selection.setVisible(true);
                 if (outOfBounds(selectedTile))
@@ -217,11 +230,10 @@ public class MapEditor {
 
                 q = selectedTile.q;
                 r = selectedTile.r;
-                Map.getTile(tiles, q, r).setAccess(true);
-                Map.getTile(tiles, q, r).setType("tileMagic_full");
-                Map.getImageView(imageViews, q, r).setImage(provider.getImage("tileMagic_full"));
-                selection.setLayoutX(p.x);
-                selection.setLayoutY(p.y);
+                Map.getTile(tiles, q, r).pushTile("tileMagic_full");
+                Map.getImageView(imageViews, q, r, Map.getTile(tiles, q, r).getHeightOfTile() - 1).setImage(provider.getImage("tileMagic_full"));selection.setLayoutX(p.x);
+
+
                 break;
 
             case TILEDIRT:
@@ -231,11 +243,9 @@ public class MapEditor {
 
                 q = selectedTile.q;
                 r = selectedTile.r;
-                Map.getTile(tiles, q, r).setAccess(true);
-                Map.getTile(tiles, q, r).setType("tileDirt");
-                Map.getImageView(imageViews, q, r).setImage(provider.getImage("tileDirt"));
-                selection.setLayoutX(p.x);
-                selection.setLayoutY(p.y);
+                Map.getTile(tiles, q, r).pushTile("tileDirt");
+                Map.getImageView(imageViews, q, r, Map.getTile(tiles, q, r).getHeightOfTile() - 1).setImage(provider.getImage("tileDirt"));selection.setLayoutX(p.x);
+
                 break;
 
             case TILEDIRT_FULL:
@@ -245,11 +255,9 @@ public class MapEditor {
 
                 q = selectedTile.q;
                 r = selectedTile.r;
-                Map.getTile(tiles, q, r).setAccess(true);
-                Map.getTile(tiles, q, r).setType("tileDirt_full");
-                Map.getImageView(imageViews, q, r).setImage(provider.getImage("tileDirt_full"));
-                selection.setLayoutX(p.x);
-                selection.setLayoutY(p.y);
+                Map.getTile(tiles, q, r).pushTile("tileDirt_full");
+                Map.getImageView(imageViews, q, r, Map.getTile(tiles, q, r).getHeightOfTile() - 1).setImage(provider.getImage("tileDirt_full"));selection.setLayoutX(p.x);
+
                 break;
 
             case TILEWATER:
@@ -259,11 +267,9 @@ public class MapEditor {
 
                 q = selectedTile.q;
                 r = selectedTile.r;
-                Map.getTile(tiles, q, r).setAccess(true);
-                Map.getTile(tiles, q, r).setType("tileWater");
-                Map.getImageView(imageViews, q, r).setImage(provider.getImage("tileWater"));
-                selection.setLayoutX(p.x);
-                selection.setLayoutY(p.y);
+                Map.getTile(tiles, q, r).pushTile("tileWater");
+                Map.getImageView(imageViews, q, r, Map.getTile(tiles, q, r).getHeightOfTile() - 1).setImage(provider.getImage("tileWater"));selection.setLayoutX(p.x);
+
                 break;
 
             case TILEWATER_FULL:
@@ -273,11 +279,9 @@ public class MapEditor {
 
                 q = selectedTile.q;
                 r = selectedTile.r;
-                Map.getTile(tiles, q, r).setAccess(true);
-                Map.getTile(tiles, q, r).setType("tileWater_full");
-                Map.getImageView(imageViews, q, r).setImage(provider.getImage("tileWater_full"));
-                selection.setLayoutX(p.x);
-                selection.setLayoutY(p.y);
+                Map.getTile(tiles, q, r).pushTile("tileWater_full");
+                Map.getImageView(imageViews, q, r, Map.getTile(tiles, q, r).getHeightOfTile() - 1).setImage(provider.getImage("tileWater_full"));selection.setLayoutX(p.x);
+
                 break;
 
             case TILESTONE:
@@ -287,11 +291,9 @@ public class MapEditor {
 
                 q = selectedTile.q;
                 r = selectedTile.r;
-                Map.getTile(tiles, q, r).setAccess(true);
-                Map.getTile(tiles, q, r).setType("tileStone");
-                Map.getImageView(imageViews, q, r).setImage(provider.getImage("tileStone"));
-                selection.setLayoutX(p.x);
-                selection.setLayoutY(p.y);
+                Map.getTile(tiles, q, r).pushTile("tileStone");
+                Map.getImageView(imageViews, q, r, Map.getTile(tiles, q, r).getHeightOfTile() - 1).setImage(provider.getImage("tileStone"));selection.setLayoutX(p.x);
+
                 break;
 
             case TILESTONE_FULL:
@@ -301,11 +303,9 @@ public class MapEditor {
 
                 q = selectedTile.q;
                 r = selectedTile.r;
-                Map.getTile(tiles, q, r).setAccess(true);
-                Map.getTile(tiles, q, r).setType("tileStone_full");
-                Map.getImageView(imageViews, q, r).setImage(provider.getImage("tileStone_full"));
-                selection.setLayoutX(p.x);
-                selection.setLayoutY(p.y);
+                Map.getTile(tiles, q, r).pushTile("tileStone_full");
+                Map.getImageView(imageViews, q, r, Map.getTile(tiles, q, r).getHeightOfTile() - 1).setImage(provider.getImage("tileStone_full"));selection.setLayoutX(p.x);
+
                 break;
 
             case TILEAUTUMN:
@@ -315,11 +315,9 @@ public class MapEditor {
 
                 q = selectedTile.q;
                 r = selectedTile.r;
-                Map.getTile(tiles, q, r).setAccess(true);
-                Map.getTile(tiles, q, r).setType("tileAutumn");
-                Map.getImageView(imageViews, q, r).setImage(provider.getImage("tileAutumn"));
-                selection.setLayoutX(p.x);
-                selection.setLayoutY(p.y);
+                Map.getTile(tiles, q, r).pushTile("tileAutumn");
+                Map.getImageView(imageViews, q, r, Map.getTile(tiles, q, r).getHeightOfTile() - 1).setImage(provider.getImage("tileAutumn"));selection.setLayoutX(p.x);
+
                 break;
 
             case TILEAUTUMN_FULL:
@@ -329,11 +327,9 @@ public class MapEditor {
 
                 q = selectedTile.q;
                 r = selectedTile.r;
-                Map.getTile(tiles, q, r).setAccess(true);
-                Map.getTile(tiles, q, r).setType("tileAutumn_full");
-                Map.getImageView(imageViews, q, r).setImage(provider.getImage("tileAutumn_full"));
-                selection.setLayoutX(p.x);
-                selection.setLayoutY(p.y);
+                Map.getTile(tiles, q, r).pushTile("tileAutumn_full");
+                Map.getImageView(imageViews, q, r, Map.getTile(tiles, q, r).getHeightOfTile() - 1).setImage(provider.getImage("tileAutumn_full"));selection.setLayoutX(p.x);
+
                 break;
 
             case TILELAVA:
@@ -343,11 +339,9 @@ public class MapEditor {
 
                 q = selectedTile.q;
                 r = selectedTile.r;
-                Map.getTile(tiles, q, r).setAccess(true);
-                Map.getTile(tiles, q, r).setType("tileLava");
-                Map.getImageView(imageViews, q, r).setImage(provider.getImage("tileLava"));
-                selection.setLayoutX(p.x);
-                selection.setLayoutY(p.y);
+                Map.getTile(tiles, q, r).pushTile("tileLava");
+                Map.getImageView(imageViews, q, r, Map.getTile(tiles, q, r).getHeightOfTile() - 1).setImage(provider.getImage("tileLava"));selection.setLayoutX(p.x);
+
                 break;
 
             case TILELAVA_FULL:
@@ -357,14 +351,15 @@ public class MapEditor {
 
                 q = selectedTile.q;
                 r = selectedTile.r;
-                Map.getTile(tiles, q, r).setAccess(true);
-                Map.getTile(tiles, q, r).setType("tileLava_full");
-                Map.getImageView(imageViews, q, r).setImage(provider.getImage("tileLava_full"));
-                selection.setLayoutX(p.x);
-                selection.setLayoutY(p.y);
+                Map.getTile(tiles, q, r).pushTile("tileLava_full");
+                Map.getImageView(imageViews, q, r, Map.getTile(tiles, q, r).getHeightOfTile() - 1).setImage(provider.getImage("tileLava_full"));selection.setLayoutX(p.x);
+
                 break;
 
         }
+        int h = Map.getTile(tiles, selectedTile.q, selectedTile.r).getHeightOfTile() - 1;
+        selection.setLayoutX(p.x);
+        selection.setLayoutY(p.y - (h > 0 ? HEX_VERTICAL_OFFSET * h : 0));
 //        if (selection == null)
 //            return;
 //        Tile selectedTile = new Tile(hexLayout.pixelToHex(new Point(x, y)).hexRound());
@@ -386,17 +381,17 @@ public class MapEditor {
     }
 
     public void rightClicked(INSTRUMENT instrument, double x, double y, boolean blocked) {
-        if (blocked)
-            return;
-        Hex selectedTile = hexLayout.pixelToHex(new Point(x, y)).hexRound();
-        if (outOfBounds(selectedTile))
-            return;
-        int q = selectedTile.q;
-        int r = selectedTile.r;
-
-        Map.getTile(tiles, q, r).setType("empty");
-        Map.getTile(tiles, q, r).setAccess(false);
-        Map.getImageView(imageViews, q, r).setImage(provider.getImage("empty"));
+//        if (blocked)
+//            return;
+//        Hex selectedTile = hexLayout.pixelToHex(new Point(x, y)).hexRound();
+//        if (outOfBounds(selectedTile))
+//            return;
+//        int q = selectedTile.q;
+//        int r = selectedTile.r;
+//
+//        Map.getTile(tiles, q, r).setType("empty");
+//        Map.getTile(tiles, q, r).setAccess(false);
+//        Map.getImageView(imageViews, q, r).setImage(provider.getImage("empty"));
     }
 
 //    public void dragged(double x, double y) {

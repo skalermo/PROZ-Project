@@ -1,6 +1,7 @@
 package engine;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Tile extends Hex{
 
@@ -10,7 +11,11 @@ public class Tile extends Hex{
 
     private String type = "empty";
 
-    private int heightOfTile = 1;
+    public static int MAX_TILE_HEIGHT = 7;
+
+    private int heightOfTile = 0;
+
+    private List<String> tilesBeneath;
 
     protected ArrayList<String> elements;
 
@@ -34,6 +39,7 @@ public class Tile extends Hex{
     }
 
     public void setType(String type) {
+
         this.type = type;
     }
 
@@ -47,6 +53,56 @@ public class Tile extends Hex{
 
     void setAccess(boolean access){
         isAccessible = access;
+    }
+
+    void pushTile(String tileType) {
+        if (type.equals("empty")) {
+            type = tileType;
+            if (tileType.equals("tileWater") ||
+            tileType.equals("tileWater_full"))
+                setAccess(false);
+            else
+                setAccess(true);
+            heightOfTile++;
+            return;
+        }
+        if (tilesBeneath == null)
+            tilesBeneath = new ArrayList<>();
+        if (tilesBeneath.size() >= MAX_TILE_HEIGHT - 1)
+            return;
+        tilesBeneath.add(type);
+        type = tileType;
+        heightOfTile++;
+    }
+
+    void popTile() {
+        if (tilesBeneath == null)
+            tilesBeneath = new ArrayList<>();
+        if (tilesBeneath.size() == 0) {
+            type = "empty";
+            setAccess(false);
+            if (heightOfTile > 0)
+                heightOfTile--;
+            return;
+        }
+        type = tilesBeneath.get(tilesBeneath.size() - 1);
+        if (type.equals("tileWater") ||
+                type.equals("tileWater_full"))
+            setAccess(false);
+        else
+            setAccess(true);
+        tilesBeneath.remove(tilesBeneath.size() - 1);
+        heightOfTile--;
+    }
+
+
+
+    public String getTypeFromTile(int index) {
+        return tilesBeneath.get(index);
+    }
+
+    public int getHeightOfTile() {
+        return heightOfTile;
     }
 
     void select(){
