@@ -10,44 +10,61 @@ public class Game {
 
     private Character chara;
     private ImageProvider provider;
-    private Layout layout;
+    private Layout offsetLayout;
+    private Layout hexLayout;
     private Tile lastSelectedTile;
     private ImageView selection;
-    private List<List<ImageView>> imageViews;
+    private List<List<List<ImageView>>> imageViews;
     private List<List<Tile>> tiles;
 
     public Game(ImageProvider provider){
 
         this.provider = provider;
-        init2dArrays();
-        layout = new Layout(Layout.pointy, new Point(37.53, 31.5), new Point(-32, -32)); //37, 32
-        Map.createMap(tiles, MapShape.HEXAGON);
-        createImageViews();
         chara = new Character();
+        offsetLayout = new Layout(Layout.pointy, new Point(Tile.HEX_WIDTH_SIZE, Tile.HEX_HEIGHT_SIZE), new Point(-Tile.HEX_HEIGHT_SIZE, -Tile.HEX_HEIGHT_SIZE));
+        hexLayout = new Layout(Layout.pointy, new Point(Tile.HEX_WIDTH_SIZE, Tile.HEX_HEIGHT_SIZE), new Point(0, 0));
+        initTilesAndViews();
+        Map.createMap(tiles, MapShape.HEXAGON);
+        refreshImageViews(tiles);
         lastSelectedTile = null;
         selection = null;
     }
 
-    private void init2dArrays(){
-        imageViews = new ArrayList<>(Map.SCR_TILEWIDTH);
-        for (int i = 0; i < Map.SCR_TILEWIDTH; i++){
-            imageViews.add(new ArrayList<>(Map.SCR_TILEHEIGHT));
-            for (int j = 0; j < Map.SCR_TILEHEIGHT; j++)
-                imageViews.get(i).add(j, null);
+    private void initTilesAndViews() {
+        imageViews = new ArrayList<>(Map.SCR_TILEHEIGHT);
+        tiles = new ArrayList<>(Map.SCR_TILEHEIGHT);
+        for (int i = 0; i < Map.SCR_TILEHEIGHT; i++) {
+            tiles.add(new ArrayList<>(Map.SCR_TILEWIDTH));
+            imageViews.add(new ArrayList<>(Map.SCR_TILEWIDTH));
+            for (int j = 0; j < Map.SCR_TILEWIDTH; j++){
+                Tile t = Map.arrIndicesToTile(i, j);
+                tiles.get(i).add(j, t);
+                imageViews.get(i).add(j, createImageViewColumn(t));
+            }
+
         }
-        tiles = new ArrayList<>(Map.SCR_TILEWIDTH);
-        for (int i = 0; i < Map.SCR_TILEWIDTH; i++){
-            tiles.add(new ArrayList<>(Map.SCR_TILEHEIGHT));
-            for (int j = 0; j < Map.SCR_TILEHEIGHT; j++)
-                tiles.get(i).add(j, new Tile(j, i));
+    }
+
+    private List<ImageView> createImageViewColumn(Tile t) {
+        Point p = offsetLayout.hexToPixel(t);
+
+        List<ImageView> imageViews = new ArrayList<>(Tile.MAX_TILE_HEIGHT);
+        for (int i = 0; i < Tile.MAX_TILE_HEIGHT; i++) {
+            ImageView iv = new ImageView();
+            iv.setLayoutX(p.x);
+            iv.setLayoutY(p.y - i * Tile.HEX_VERTICAL_OFFSET);
+            iv.setImage(provider.getImage(t.getType()));
+            imageViews.add(iv);
         }
+
+        return imageViews;
     }
 
     public List<List<Tile>> getTiles() {
         return tiles;
     }
 
-    public List<List<ImageView>> getImageViews() {
+    public List<List<List<ImageView>>> getImageViews() {
 
         return imageViews;
     }
@@ -60,29 +77,20 @@ public class Game {
     private void refreshImageViews(List<List<Tile>> tiles) {
         for (int i = 0; i < tiles.size(); i++){
             for (int j = 0; j < tiles.get(i).size(); j++){
-                if (imageViews.get(i).get(j) != null && tiles.get(i).get(j) != null)
-                imageViews.get(i).get(j).setImage(provider.getImage(tiles.get(i).get(j).getType()));
+
+//                if (imageViews.get(i).get(j) != null && tiles.get(i).get(j) != null)
+                int height = tiles.get(i).get(j).getHeightOfTile();
+                if (height < 2)
+                    imageViews.get(i).get(j).get(0).setImage(provider.getImage(tiles.get(i).get(j).getType()));
+                else {
+                    for (int h = 0; h < height - 1; h++) {
+                        imageViews.get(i).get(j).get(h).setImage(provider.getImage(tiles.get(i).get(j).getTypeFromTile(h)));
+                    }
+                    imageViews.get(i).get(j).get(height-1).setImage(provider.getImage(tiles.get(i).get(j).getType()));
+                }
             }
         }
 
-    }
-
-    private void createImageViews(){
-
-        for (int i = 0; i < tiles.size(); i++)
-            for (int j = 0; j < tiles.get(i).size(); j++)
-                imageViews.get(i).set(j, createImageView(tiles.get(i).get(j)));
-
-
-    }
-
-    private ImageView createImageView(Tile t) {
-        ImageView imageView = new ImageView();
-        imageView.setImage(provider.getImage(t.getType()));
-        Point p = layout.hexToPixel(t);
-        imageView.setLayoutX(p.x);
-        imageView.setLayoutY(p.y);
-        return imageView;
     }
 
     public ImageView getSelectedTile(){
@@ -99,7 +107,7 @@ public class Game {
 
     public ArrayList<ImageView> getCharactersImageViews(){
         ArrayList<ImageView> imageViews = new ArrayList<>();
-        chara.createImageView(layout, provider);
+        chara.createImageView(hexLayout, provider);
         imageViews.add(chara.getImageView());
         return imageViews;
     }
@@ -107,26 +115,19 @@ public class Game {
     public void select(double x, double y) {
         if (selection == null)
             return;
-        Layout layout1 = new Layout(Layout.pointy, new Point(37.53, 31.5), new Point(-0, -0));
-        Tile selectedTile = new Tile(layout1.pixelToHex(new Point(x, y)).hexRound());
-        Point p = layout.hexToPixel(selectedTile);
-
-//        if (selectedTile.r >= 0 && selectedTile.r < 30 && selectedTile.q >= 0 && selectedTile.q < 21 && map.getMap()[selectedTile.r][selectedTile.q] != null){
-//            map.getMap()[selectedTile.r][selectedTile.q].setType("empty");
-//            imageViews[selectedTile.r][selectedTile.q].setImage(provider.getImage("emtpy"));
-//        }
+        Tile selectedTile = new Tile(hexLayout.pixelToHex(new Point(x, y)).hexRound());
+        Point p = offsetLayout.hexToPixel(selectedTile);
 
         selection.setLayoutX(p.x);
         selection.setLayoutY(p.y);
     }
 
     public void click(double x, double y) {
-        Layout layout1 = new Layout(Layout.pointy, new Point(37.53, 31.5), new Point(-0, -0));
-        Hex selectedHex = layout1.pixelToHex(new Point(x, y)).hexRound();
-        if (isAccessible(selectedHex) && chara.getH().distance(selectedHex) < 3)
+        Hex selectedHex = hexLayout.pixelToHex(new Point(x, y)).hexRound();
+        if (chara.getH().distance(selectedHex) < 3)
         {
             chara.setH(selectedHex);
-            Point p = layout.hexToPixel(selectedHex);
+            Point p = offsetLayout.hexToPixel(selectedHex);
             chara.getImageView().setLayoutX(p.x+15);
             chara.getImageView().setLayoutY(p.y-10);
         }

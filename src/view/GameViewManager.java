@@ -227,10 +227,10 @@ public class GameViewManager {
     }
 
     private void addAllImageViews(Game game){
-        for (List<ImageView> imageViews: game.getImageViews())
-            for (ImageView imageView: imageViews)
-                if (imageView != null)
-                    gamePane.getChildren().add(imageView);
+        for (List<List<ImageView>> ivvv: game.getImageViews())
+            for (List<ImageView> ivv: ivvv)
+                for (ImageView iv: ivv)
+                    gamePane.getChildren().add(iv);
     }
 
     private void createGameLoop(){
