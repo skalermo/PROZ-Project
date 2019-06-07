@@ -5,19 +5,26 @@ import java.util.List;
 
 public class Tile extends Hex{
 
+    public static int MAX_TILE_HEIGHT = 7;
+    public static int MAX_ELEMENTS_AMOUNT = 5;
+    public static double HEX_VERTICAL_OFFSET = 21;
+    public static double HEX_WIDTH_SIZE = 65/Math.sqrt(3);
+    public static double HEX_HEIGHT_SIZE = 31.5;
+
     private boolean isAccessible = false;
 
     private boolean isSelected = false;
 
     private String type = "empty";
 
-    public static int MAX_TILE_HEIGHT = 7;
+    private int elementsAmount = 0;
 
     private int heightOfTile = 0;
 
     private List<String> tilesBeneath;
 
-    protected ArrayList<String> elements;
+    private List<String> elementsTypes;
+    private List<Point> elementsCoords;
 
     public Tile(int q, int r){
 
@@ -95,6 +102,24 @@ public class Tile extends Hex{
         heightOfTile--;
     }
 
+    void pushElement(String type, Point coords) {
+        if (elementsAmount >= MAX_ELEMENTS_AMOUNT)
+            return;
+        if (elementsTypes == null && elementsCoords == null) {
+            elementsTypes = new ArrayList<>(Tile.MAX_ELEMENTS_AMOUNT);
+            elementsCoords = new ArrayList<>(Tile.MAX_ELEMENTS_AMOUNT);
+        }
+        elementsTypes.add(type);
+        elementsCoords.add(coords);
+        elementsAmount++;
+    }
+
+    void removeElements() {
+        elementsAmount = 0;
+        elementsTypes.clear();
+        elementsCoords.clear();
+    }
+
 
 
     public String getTypeFromTile(int index) {
@@ -103,6 +128,18 @@ public class Tile extends Hex{
 
     public int getHeightOfTile() {
         return heightOfTile;
+    }
+
+    public List<String> getElementsTypes() {
+        return elementsTypes;
+    }
+
+    public List<Point> getElementsCoords() {
+        return elementsCoords;
+    }
+
+    public int getElementsAmount() {
+        return elementsAmount;
     }
 
     void select(){

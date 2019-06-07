@@ -1,6 +1,8 @@
 package engine;
 
-public class Point
+import java.io.Serializable;
+
+public class Point implements Serializable
 {
     public final double x;
     public final double y;

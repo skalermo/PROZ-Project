@@ -7,17 +7,18 @@ import view.ImageProvider;
 import java.util.ArrayList;
 import java.util.List;
 
+
+
 public class MapEditor {
 
-    private static double HEX_VERTICAL_OFFSET = 21;
-    private static double HEX_WIDTH_SIZE = 65/Math.sqrt(3);
-    private static double HEX_HEIGHT_SIZE = 31.5;
+
 
     private ImageProvider provider;
     private Layout offsetLayout;
     private Layout hexLayout;
     private Tile lastSelectedTile;
     private ImageView selection;
+    private List<List<List<ImageView>>> elements;
     private List<List<List<ImageView>>> imageViews;
     private List<List<Tile>> tiles;
 
@@ -27,8 +28,8 @@ public class MapEditor {
     public MapEditor(ImageProvider provider) {
 
         this.provider = provider;
-        offsetLayout = new Layout(Layout.pointy, new Point(HEX_WIDTH_SIZE, HEX_HEIGHT_SIZE), new Point(-HEX_HEIGHT_SIZE, -HEX_HEIGHT_SIZE));
-        hexLayout = new Layout(Layout.pointy, new Point(HEX_WIDTH_SIZE, HEX_HEIGHT_SIZE), new Point(0, 0));
+        offsetLayout = new Layout(Layout.pointy, new Point(Tile.HEX_WIDTH_SIZE, Tile.HEX_HEIGHT_SIZE), new Point(-Tile.HEX_HEIGHT_SIZE, -Tile.HEX_HEIGHT_SIZE));
+        hexLayout = new Layout(Layout.pointy, new Point(Tile.HEX_WIDTH_SIZE, Tile.HEX_HEIGHT_SIZE), new Point(0, 0));
         initTilesAndViews();
         Map.createMap(tiles, MapShape.HEXAGON);
         refreshImageViews(tiles);
@@ -40,14 +41,18 @@ public class MapEditor {
     private void initTilesAndViews() {
         imageViews = new ArrayList<>(Map.SCR_TILEHEIGHT);
         tiles = new ArrayList<>(Map.SCR_TILEHEIGHT);
+        elements = new ArrayList<>(Map.SCR_TILEHEIGHT);
         for (int i = 0; i < Map.SCR_TILEHEIGHT; i++) {
             tiles.add(new ArrayList<>(Map.SCR_TILEWIDTH));
             imageViews.add(new ArrayList<>(Map.SCR_TILEWIDTH));
+            elements.add(new ArrayList<>(Map.SCR_TILEWIDTH));
             for (int j = 0; j < Map.SCR_TILEWIDTH; j++){
-                Tile t = Map.arrIndeciesToTile(i, j);
+                Tile t = Map.arrIndicesToTile(i, j);
                 tiles.get(i).add(j, t);
                 imageViews.get(i).add(j, createImageViewColumn(t));
+                elements.get(i).add(j, createTileElements());
             }
+
 
         }
     }
@@ -59,6 +64,9 @@ public class MapEditor {
     public List<List<List<ImageView>>> getImageViews() {
 
         return imageViews;
+    }
+    public List<List<List<ImageView>>> getElements() {
+        return elements;
     }
 
     public void setTiles(List<List<Tile>> tiles) {
@@ -82,6 +90,14 @@ public class MapEditor {
                     }
                     imageViews.get(i).get(j).get(height-1).setImage(provider.getImage(tiles.get(i).get(j).getType()));
                 }
+
+                for (int k = 0; k < tiles.get(i).get(j).getElementsAmount(); k++) {
+                    elements.get(i).get(j).get(k).setImage(provider.getImage(tiles.get(i).get(j).getElementsTypes().get(k)));
+                    elements.get(i).get(j).get(k).setLayoutX(tiles.get(i).get(j).getElementsCoords().get(k).x);
+                    elements.get(i).get(j).get(k).setLayoutY(tiles.get(i).get(j).getElementsCoords().get(k).y);
+
+                }
+
             }
         }
 
@@ -94,8 +110,18 @@ public class MapEditor {
         for (int i = 0; i < Tile.MAX_TILE_HEIGHT; i++) {
             ImageView iv = new ImageView();
             iv.setLayoutX(p.x);
-            iv.setLayoutY(p.y - i * HEX_VERTICAL_OFFSET);
+            iv.setLayoutY(p.y - i * Tile.HEX_VERTICAL_OFFSET);
             iv.setImage(provider.getImage(t.getType()));
+            imageViews.add(iv);
+        }
+
+        return imageViews;
+    }
+
+    private List<ImageView> createTileElements() {
+        List<ImageView> imageViews = new ArrayList<>(Tile.MAX_ELEMENTS_AMOUNT);
+        for (int i = 0; i < Tile.MAX_ELEMENTS_AMOUNT; i++) {
+            ImageView iv = new ImageView();
             imageViews.add(iv);
         }
 
@@ -140,13 +166,14 @@ public class MapEditor {
             case TILEAUTUMN_FULL:
             case TILELAVA:
             case TILELAVA_FULL:
+            case TREEGREEN_MID:
                 selection.setVisible(true);
                 if(outOfBounds(selectedTile))
                     return;
 
                 int h = Map.getTile(tiles, selectedTile.q, selectedTile.r).getHeightOfTile() - 1;
                 selection.setLayoutX(p.x);
-                selection.setLayoutY(p.y - (h > 0 ? HEX_VERTICAL_OFFSET * h : 0));
+                selection.setLayoutY(p.y - (h > 0 ? Tile.HEX_VERTICAL_OFFSET * h : 0));
                 break;
 
 
@@ -166,7 +193,8 @@ public class MapEditor {
     public void leftClicked(INSTRUMENT instrument, double x, double y, boolean blocked) {
         if (blocked)
             return;
-        Tile selectedTile = new Tile(hexLayout.pixelToHex(new Point(x, y)).hexRound());
+        Point pixel = new Point(x, y);
+        Tile selectedTile = new Tile(hexLayout.pixelToHex(pixel).hexRound());
         Point p = offsetLayout.hexToPixel(selectedTile);
         int q, r;
 
@@ -352,14 +380,30 @@ public class MapEditor {
                 q = selectedTile.q;
                 r = selectedTile.r;
                 Map.getTile(tiles, q, r).pushTile("tileLava_full");
-                Map.getImageView(imageViews, q, r, Map.getTile(tiles, q, r).getHeightOfTile() - 1).setImage(provider.getImage("tileLava_full"));selection.setLayoutX(p.x);
+                Map.getImageView(imageViews, q, r, Map.getTile(tiles, q, r).getHeightOfTile() - 1).setImage(provider.getImage("tileLava_full"));
+                selection.setLayoutX(p.x);
 
+                break;
+
+            case TREEGREEN_MID:
+                selection.setVisible(true);
+                if (outOfBounds(selectedTile))
+                    return;
+
+                q = selectedTile.q;
+                r = selectedTile.r;
+                ImageView iv = new ImageView(provider.getImage("treeGreen_mid"));
+                int height = Map.getTile(tiles, selectedTile.q, selectedTile.r).getHeightOfTile() - 1;
+                Point treesOrigin = new Point( x - iv.getImage().getWidth()/2, y - iv.getImage().getHeight() * 0.9 - (height > 0 ? height * Tile.HEX_VERTICAL_OFFSET : 0));
+
+                Map.getTile(tiles, q, r).pushElement("treeGreen_mid", treesOrigin);
+                Map.pushElementView(elements, iv, q, r, treesOrigin);
                 break;
 
         }
         int h = Map.getTile(tiles, selectedTile.q, selectedTile.r).getHeightOfTile() - 1;
         selection.setLayoutX(p.x);
-        selection.setLayoutY(p.y - (h > 0 ? HEX_VERTICAL_OFFSET * h : 0));
+        selection.setLayoutY(p.y - (h > 0 ? Tile.HEX_VERTICAL_OFFSET * h : 0));
 //        if (selection == null)
 //            return;
 //        Tile selectedTile = new Tile(hexLayout.pixelToHex(new Point(x, y)).hexRound());

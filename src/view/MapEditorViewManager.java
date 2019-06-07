@@ -1,13 +1,14 @@
 package view;
 
 import application.IOManager;
+import engine.Map;
 import engine.MapEditor;
+import engine.Tile;
 import javafx.animation.AnimationTimer;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
@@ -264,6 +265,7 @@ public class MapEditorViewManager {
         createSelectTool();
         createEraserTool();
         createTileTool();
+        createTreesTool();
     }
 
     private void createSelectTool() {
@@ -321,6 +323,15 @@ public class MapEditorViewManager {
 //        });
     }
 
+    private void createTreesTool() {
+        FlowPane treesPane = createRelatedInstruments();
+        ExpandableInstrumentButton tree = new ExpandableInstrumentButton(INSTRUMENT.TREEGREEN_MID, treesPane, instrumentPanel);
+        instrumentPanel.addInstrument(tree);
+        treesPane.setLayoutX(instrumentPanel.getLayoutX());
+        treesPane.setLayoutY(instrumentPanel.getLayoutY());
+
+    }
+
     private FlowPane createRelatedInstruments() {
         FlowPane relatedInstrumentsPane = new FlowPane();
         final String BACKGROUND_STYLE = "-fx-background-color: rgba(215, 215, 215, 0.85)";
@@ -337,10 +348,24 @@ public class MapEditorViewManager {
 
 
     private void addAllImageViews(MapEditor editor){
-        for (List<List<ImageView>> ivvv: editor.getImageViews())
-            for (List<ImageView> ivv: ivvv)
-                for (ImageView iv: ivv)
-                editorPane.getChildren().add(iv);
+        for (int i = 0; i < Map.SCR_TILEHEIGHT; i++)
+            for (int j = 0; j < Map.SCR_TILEWIDTH; j++) {
+                for (int k = 0; k < Tile.MAX_TILE_HEIGHT; k++)
+                    editorPane.getChildren().add(editor.getImageViews().get(i).get(j).get(k));
+                for (int k = 0; k < Tile.MAX_ELEMENTS_AMOUNT; k++)
+                    editorPane.getChildren().add(editor.getElements().get(i).get(j).get(k));
+            }
+
+
+//        for (List<List<ImageView>> ivvv: editor.getImageViews())
+//            for (List<ImageView> ivv: ivvv)
+//                for (ImageView iv: ivv)
+//                    editorPane.getChildren().add(iv);
+//
+//        for (List<List<ImageView>> ivvv: editor.getElements())
+//            for (List<ImageView> ivv: ivvv)
+//                for (ImageView iv: ivv)
+//                    editorPane.getChildren().add(iv);
     }
 
     private void createSessionLoop(){

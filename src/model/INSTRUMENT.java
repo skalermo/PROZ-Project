@@ -34,6 +34,10 @@ public enum INSTRUMENT {
     TILELAVA_FULL("/view/resources/Tiles/tileLava_full.png"),
 
 
+
+    TREEGREEN_MID("/view/resources/Tiles/treeGreen_mid.png"),
+
+
     ERASER("model/resources/Editing-Eraser-icon-small.png");
 
 

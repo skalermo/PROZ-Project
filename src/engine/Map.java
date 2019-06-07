@@ -120,7 +120,7 @@ public class Map {
         return new Point(r, q + t);
     }
 
-    static Tile arrIndeciesToTile(int i, int j) {
+    static Tile arrIndicesToTile(int i, int j) {
         return new Tile(j - (i+1)/2, i);
     }
 
@@ -128,8 +128,21 @@ public class Map {
         return imageViews.get(r).get(q + (r+1)/2).get(h);
     }
 
-    static void setImageView(List<List<List<ImageView>>> imageViews, int q, int r, int h, ImageView imageView){
-        imageViews.get(r).get(q + (r+1)/2).set(h, imageView);
+    static void pushElementView(List<List<List<ImageView>>> imageViews, ImageView iv, int q, int r, Point p) {
+        int i;
+        if ((i = getFirstNull(imageViews, q, r)) == -1)
+            return;
+        imageViews.get(r).get(q + (r+1)/2).get(i).setImage(iv.getImage());
+        imageViews.get(r).get(q + (r+1)/2).get(i).setLayoutX(p.x);
+        imageViews.get(r).get(q + (r+1)/2).get(i).setLayoutY(p.y);
+    }
+
+    static private int getFirstNull(List<List<List<ImageView>>> imageViews, int q, int r) {
+        for (int i = 0; i < Tile.MAX_ELEMENTS_AMOUNT; i++)
+            if (imageViews.get(r).get(q + (r+1)/2).get(i).getImage() == null)
+                return i;
+
+        return -1;
     }
 
 
