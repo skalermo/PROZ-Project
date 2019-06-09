@@ -214,8 +214,6 @@ public class MapEditorViewManager {
             public void handle(MouseEvent mouseEvent) {
                 if (mouseEvent.getButton() == MouseButton.PRIMARY)
                     editor.leftClicked(instrumentPanel.getCurrentInstrumentStyle(), mouseEvent.getSceneX(), mouseEvent.getSceneY(), isDrawingBlocked);
-                else if (mouseEvent.getButton() == MouseButton.SECONDARY)
-                    editor.rightClicked(instrumentPanel.getCurrentInstrumentStyle(), mouseEvent.getSceneX(), mouseEvent.getSceneY(), isDrawingBlocked);
             }
         });
 

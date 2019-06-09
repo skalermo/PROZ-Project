@@ -115,6 +115,9 @@ public class Tile extends Hex{
     }
 
     void removeElements() {
+        if (elementsCoords == null || elementsTypes == null) {
+            return;
+        }
         elementsAmount = 0;
         elementsTypes.clear();
         elementsCoords.clear();
