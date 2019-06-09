@@ -60,6 +60,30 @@ public enum INSTRUMENT {
     PINEBLUE_HIGH("/view/resources/Tiles/pineBlue_high.png"),
 
 
+    FLOWERELLOW("/view/resources/Tiles/flowerYellow.png"),
+
+    FLOWERWHITE("/view/resources/Tiles/flowerWhite.png"),
+
+    FLOWERRED("/view/resources/Tiles/flowerRed.png"),
+
+    FLOWERGREEN("/view/resources/Tiles/flowerGreen.png"),
+
+    FLOWERBLUE("/view/resources/Tiles/flowerBlue.png"),
+
+    BUSHSNOW("/view/resources/Tiles/bushSnow.png"),
+
+    BUSHSAND("/view/resources/Tiles/bushSand.png"),
+
+    BUSHMAGIC("/view/resources/Tiles/bushMagic.png"),
+
+    BUSHGRASS("/view/resources/Tiles/bushGrass.png"),
+
+    BUSHDIRT("/view/resources/Tiles/bushDirt.png"),
+
+    BUSHAUTUMN("/view/resources/Tiles/bushAutumn.png"),
+
+
+
     ERASER("model/resources/Editing-Eraser-icon-small.png");
 
 

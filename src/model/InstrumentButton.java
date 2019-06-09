@@ -16,7 +16,6 @@ public class InstrumentButton extends Button {
         this.eib = eib;
         instrumentStyle = instrument;
         instrumentPanel = panel;
-        setMinSize(32, 32);
         createBackgroundStyle(instrument);
 
         initializeButtonListeners();
@@ -71,5 +70,6 @@ public class InstrumentButton extends Button {
 
         setStyle("-fx-background-image: url('" + instrument.getUrlInstrument() + "');" +
                 "-fx-background-size: " + this.getMinWidth() + " " + this.getMinHeight());
+
     }
 }

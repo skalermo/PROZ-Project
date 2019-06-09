@@ -264,6 +264,7 @@ public class MapEditorViewManager {
         createEraserTool();
         createTileTool();
         createTreesTool();
+        createFlowerTool();
     }
 
     private void createSelectTool() {
@@ -319,6 +320,25 @@ public class MapEditorViewManager {
         tree.addRelated(new InstrumentButton(INSTRUMENT.PINEBLUE_LOW, instrumentPanel, tree));
         tree.addRelated(new InstrumentButton(INSTRUMENT.PINEBLUE_HIGH, instrumentPanel, tree));
 
+    }
+
+    private void createFlowerTool() {
+        FlowPane flowersPane = createRelatedInstruments();
+        ExpandableInstrumentButton flower = new ExpandableInstrumentButton(INSTRUMENT.FLOWERGREEN, flowersPane, instrumentPanel);
+        instrumentPanel.addInstrument(flower);
+        flowersPane.setLayoutX(instrumentPanel.getLayoutX());
+        flowersPane.setLayoutY(instrumentPanel.getLayoutY());
+        flower.addRelated(new InstrumentButton(INSTRUMENT.FLOWERELLOW, instrumentPanel, flower));
+        flower.addRelated(new InstrumentButton(INSTRUMENT.FLOWERRED, instrumentPanel, flower));
+        flower.addRelated(new InstrumentButton(INSTRUMENT.FLOWERWHITE, instrumentPanel, flower));
+        flower.addRelated(new InstrumentButton(INSTRUMENT.FLOWERBLUE, instrumentPanel, flower));
+        flower.addRelated(new InstrumentButton(INSTRUMENT.FLOWERGREEN, instrumentPanel, flower));
+        flower.addRelated(new InstrumentButton(INSTRUMENT.BUSHSNOW, instrumentPanel, flower));
+        flower.addRelated(new InstrumentButton(INSTRUMENT.BUSHSAND, instrumentPanel, flower));
+        flower.addRelated(new InstrumentButton(INSTRUMENT.BUSHGRASS, instrumentPanel, flower));
+        flower.addRelated(new InstrumentButton(INSTRUMENT.BUSHDIRT, instrumentPanel, flower));
+        flower.addRelated(new InstrumentButton(INSTRUMENT.BUSHAUTUMN, instrumentPanel, flower));
+        flower.addRelated(new InstrumentButton(INSTRUMENT.BUSHMAGIC, instrumentPanel, flower));
     }
 
     private FlowPane createRelatedInstruments() {

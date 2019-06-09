@@ -538,6 +538,160 @@ public class MapEditor {
                 Map.pushElementView(elements, iv, q, r, treesIVOrigin);
                 break;
 
+            case FLOWERELLOW:
+                selection.setVisible(true);
+
+                if (selectedTile.getType().equals("empty"))
+                    break;
+                iv = new ImageView(provider.getImage("flowerYellow"));
+                treesOrigin = new Point( x - iv.getImage().getWidth()/2, y - iv.getImage().getHeight() * 0.9);
+
+                treesIVOrigin = new Point( x - iv.getImage().getWidth()/2, y - iv.getImage().getHeight() * 0.9 - heightBefore * Tile.HEX_VERTICAL_OFFSET);
+
+                selectedTile.pushElement("flowerYellow", treesOrigin);
+                Map.pushElementView(elements, iv, q, r, treesIVOrigin);
+                break;
+
+            case FLOWERRED:
+                selection.setVisible(true);
+
+                if (selectedTile.getType().equals("empty"))
+                    break;
+                iv = new ImageView(provider.getImage("flowerRed"));
+                treesOrigin = new Point( x - iv.getImage().getWidth()/2, y - iv.getImage().getHeight() * 0.9);
+
+                treesIVOrigin = new Point( x - iv.getImage().getWidth()/2, y - iv.getImage().getHeight() * 0.9 - heightBefore * Tile.HEX_VERTICAL_OFFSET);
+
+                selectedTile.pushElement("flowerRed", treesOrigin);
+                Map.pushElementView(elements, iv, q, r, treesIVOrigin);
+                break;
+
+            case FLOWERWHITE:
+                selection.setVisible(true);
+
+                if (selectedTile.getType().equals("empty"))
+                    break;
+                iv = new ImageView(provider.getImage("flowerWhite"));
+                treesOrigin = new Point( x - iv.getImage().getWidth()/2, y - iv.getImage().getHeight() * 0.9);
+
+                treesIVOrigin = new Point( x - iv.getImage().getWidth()/2, y - iv.getImage().getHeight() * 0.9 - heightBefore * Tile.HEX_VERTICAL_OFFSET);
+
+                selectedTile.pushElement("flowerWhite", treesOrigin);
+                Map.pushElementView(elements, iv, q, r, treesIVOrigin);
+                break;
+
+            case FLOWERBLUE:
+                selection.setVisible(true);
+
+                if (selectedTile.getType().equals("empty"))
+                    break;
+                iv = new ImageView(provider.getImage("flowerBlue"));
+                treesOrigin = new Point( x - iv.getImage().getWidth()/2, y - iv.getImage().getHeight() * 0.9);
+
+                treesIVOrigin = new Point( x - iv.getImage().getWidth()/2, y - iv.getImage().getHeight() * 0.9 - heightBefore * Tile.HEX_VERTICAL_OFFSET);
+
+                selectedTile.pushElement("flowerBlue", treesOrigin);
+                Map.pushElementView(elements, iv, q, r, treesIVOrigin);
+                break;
+
+            case FLOWERGREEN:
+                selection.setVisible(true);
+
+                if (selectedTile.getType().equals("empty"))
+                    break;
+                iv = new ImageView(provider.getImage("flowerGreen"));
+                treesOrigin = new Point( x - iv.getImage().getWidth()/2, y - iv.getImage().getHeight() * 0.9);
+
+                treesIVOrigin = new Point( x - iv.getImage().getWidth()/2, y - iv.getImage().getHeight() * 0.9 - heightBefore * Tile.HEX_VERTICAL_OFFSET);
+
+                selectedTile.pushElement("flowerGreen", treesOrigin);
+                Map.pushElementView(elements, iv, q, r, treesIVOrigin);
+                break;
+
+            case BUSHSAND:
+                selection.setVisible(true);
+
+                if (selectedTile.getType().equals("empty"))
+                    break;
+                iv = new ImageView(provider.getImage("bushSand"));
+                treesOrigin = new Point( x - iv.getImage().getWidth()/2, y - iv.getImage().getHeight() * 0.9);
+
+                treesIVOrigin = new Point( x - iv.getImage().getWidth()/2, y - iv.getImage().getHeight() * 0.9 - heightBefore * Tile.HEX_VERTICAL_OFFSET);
+
+                selectedTile.pushElement("bushSand", treesOrigin);
+                Map.pushElementView(elements, iv, q, r, treesIVOrigin);
+                break;
+
+            case BUSHSNOW:
+                selection.setVisible(true);
+
+                if (selectedTile.getType().equals("empty"))
+                    break;
+                iv = new ImageView(provider.getImage("bushSnow"));
+                treesOrigin = new Point( x - iv.getImage().getWidth()/2, y - iv.getImage().getHeight() * 0.9);
+
+                treesIVOrigin = new Point( x - iv.getImage().getWidth()/2, y - iv.getImage().getHeight() * 0.9 - heightBefore * Tile.HEX_VERTICAL_OFFSET);
+
+                selectedTile.pushElement("bushSnow", treesOrigin);
+                Map.pushElementView(elements, iv, q, r, treesIVOrigin);
+                break;
+
+            case BUSHGRASS:
+                selection.setVisible(true);
+
+                if (selectedTile.getType().equals("empty"))
+                    break;
+                iv = new ImageView(provider.getImage("bushGrass"));
+                treesOrigin = new Point( x - iv.getImage().getWidth()/2, y - iv.getImage().getHeight() * 0.9);
+
+                treesIVOrigin = new Point( x - iv.getImage().getWidth()/2, y - iv.getImage().getHeight() * 0.9 - heightBefore * Tile.HEX_VERTICAL_OFFSET);
+
+                selectedTile.pushElement("bushGrass", treesOrigin);
+                Map.pushElementView(elements, iv, q, r, treesIVOrigin);
+                break;
+
+            case BUSHMAGIC:
+                selection.setVisible(true);
+
+                if (selectedTile.getType().equals("empty"))
+                    break;
+                iv = new ImageView(provider.getImage("bushMagic"));
+                treesOrigin = new Point( x - iv.getImage().getWidth()/2, y - iv.getImage().getHeight() * 0.9);
+
+                treesIVOrigin = new Point( x - iv.getImage().getWidth()/2, y - iv.getImage().getHeight() * 0.9 - heightBefore * Tile.HEX_VERTICAL_OFFSET);
+
+                selectedTile.pushElement("bushMagic", treesOrigin);
+                Map.pushElementView(elements, iv, q, r, treesIVOrigin);
+                break;
+
+            case BUSHDIRT:
+                selection.setVisible(true);
+
+                if (selectedTile.getType().equals("empty"))
+                    break;
+                iv = new ImageView(provider.getImage("bushDirt"));
+                treesOrigin = new Point( x - iv.getImage().getWidth()/2, y - iv.getImage().getHeight() * 0.9);
+
+                treesIVOrigin = new Point( x - iv.getImage().getWidth()/2, y - iv.getImage().getHeight() * 0.9 - heightBefore * Tile.HEX_VERTICAL_OFFSET);
+
+                selectedTile.pushElement("bushDirt", treesOrigin);
+                Map.pushElementView(elements, iv, q, r, treesIVOrigin);
+                break;
+
+            case BUSHAUTUMN:
+                selection.setVisible(true);
+
+                if (selectedTile.getType().equals("empty"))
+                    break;
+                iv = new ImageView(provider.getImage("bushAutumn"));
+                treesOrigin = new Point( x - iv.getImage().getWidth()/2, y - iv.getImage().getHeight() * 0.9);
+
+                treesIVOrigin = new Point( x - iv.getImage().getWidth()/2, y - iv.getImage().getHeight() * 0.9 - heightBefore * Tile.HEX_VERTICAL_OFFSET);
+
+                selectedTile.pushElement("bushAutumn", treesOrigin);
+                Map.pushElementView(elements, iv, q, r, treesIVOrigin);
+                break;
+
 
 
         }
