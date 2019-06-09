@@ -44,13 +44,13 @@ public class ExpandableInstrumentButton {
         currentInstrument.setInstrumentStyle(instrument);
     }
 
-    public void setFlowPanePosition(int i){
+    public void setFlowPanePosition(int layoutY, InstrumentButton instrumentButton){
         if (paneWithInstruments == null)
             return;
 
-        paneWithInstruments.setPrefSize((10+currentInstrument.getMinWidth()*(i%3)), (5+currentInstrument.getMinHeight())*(double)(i/3));
-        paneWithInstruments.setTranslateX(2*currentInstrument.getMinWidth());
-        paneWithInstruments.setTranslateY(i*currentInstrument.getMinHeight());
+        paneWithInstruments.setPrefWidth((instrumentButton.getMinWidth() + instrumentPanel.getSpacing()) * 3);
+        paneWithInstruments.setTranslateX(instrumentPanel.getPrefWidth() + instrumentPanel.getSpacing());
+        paneWithInstruments.setTranslateY(layoutY - instrumentButton.getMinHeight() - instrumentPanel.getSpacing());
     }
 
 

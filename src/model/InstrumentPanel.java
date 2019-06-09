@@ -11,13 +11,15 @@ public class InstrumentPanel extends VBox {
     private List<ExpandableInstrumentButton> instrumentList;
     private INSTRUMENT currentInstrumentStyle;
     private FlowPane currentRelPane;
+    private int layoutYofLastInstrument;
     private static final String BACKGROUND_STYLE = "-fx-background-color: rgba(215, 215, 215, 0.85)";
 
     public InstrumentPanel() {
+        layoutYofLastInstrument = 0;
         instrumentList = new ArrayList<>();
         currentInstrumentStyle = INSTRUMENT.SELECT;
         this.setVisible(true);
-        this.setAlignment(Pos.BASELINE_CENTER);
+        this.setAlignment(Pos.TOP_CENTER);
         this.setStyle(BACKGROUND_STYLE);
         this.setSpacing(10);
     }
@@ -40,8 +42,9 @@ public class InstrumentPanel extends VBox {
 
     public void addInstrument(ExpandableInstrumentButton expandableInstrumentButton) {
         this.getChildren().add(expandableInstrumentButton.getCurrentInstrument());
+        layoutYofLastInstrument += this.getSpacing() + expandableInstrumentButton.getCurrentInstrument().getMinHeight();
         instrumentList.add(expandableInstrumentButton);
-        expandableInstrumentButton.setFlowPanePosition(instrumentList.size());
+        expandableInstrumentButton.setFlowPanePosition(layoutYofLastInstrument, expandableInstrumentButton.getCurrentInstrument());
     }
 
 }
