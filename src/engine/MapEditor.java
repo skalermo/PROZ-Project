@@ -147,40 +147,45 @@ public class MapEditor {
             return;
         Tile selectedTile = new Tile(hexLayout.pixelToHex(new Point(x, y)).hexRound());
         Point p = offsetLayout.hexToPixel(selectedTile);
-        switch (instrument) {
-            case NONE:
+        if (instrument == INSTRUMENT.NONE)
+            return;
+
+        if (instrument == INSTRUMENT.SELECT ||
+                instrument == INSTRUMENT.ERASER ||
+                instrument == INSTRUMENT.TILEGRASS ||
+                instrument == INSTRUMENT.TILEGRASS_FULL ||
+                instrument == INSTRUMENT.TILEMAGIC ||
+                instrument == INSTRUMENT.TILEMAGIC_FULL ||
+                instrument == INSTRUMENT.TILEDIRT ||
+                instrument == INSTRUMENT.TILEDIRT_FULL ||
+                instrument == INSTRUMENT.TILEWATER ||
+                instrument == INSTRUMENT.TILEWATER_FULL ||
+                instrument == INSTRUMENT.TILESTONE ||
+                instrument == INSTRUMENT.TILESTONE_FULL ||
+                instrument == INSTRUMENT.TILEAUTUMN ||
+                instrument == INSTRUMENT.TILEAUTUMN_FULL ||
+                instrument == INSTRUMENT.TREEGREEN_MID ||
+                instrument == INSTRUMENT.TREEGREEN_LOW ||
+                instrument == INSTRUMENT.TREEGREEN_HIGH ||
+                instrument == INSTRUMENT.PINEGREEN_MID ||
+                instrument == INSTRUMENT.PINEGREEN_LOW ||
+                instrument == INSTRUMENT.PINEGREEN_HIGH ||
+                instrument == INSTRUMENT.TREEBLUE_MID ||
+                instrument == INSTRUMENT.TREEBLUE_LOW ||
+                instrument == INSTRUMENT.TREEBLUE_HIGH ||
+                instrument == INSTRUMENT.PINEBLUE_MID ||
+                instrument == INSTRUMENT.PINEBLUE_LOW ||
+                instrument == INSTRUMENT.PINEBLUE_HIGH) {
+
+            selection.setVisible(true);
+            if (outOfBounds(selectedTile))
                 return;
 
-            case SELECT:
-            case ERASER:
-            case TILEGRASS:
-            case TILEGRASS_FULL:
-            case TILEMAGIC:
-            case TILEMAGIC_FULL:
-            case TILEDIRT:
-            case TILEDIRT_FULL:
-            case TILEWATER:
-            case TILEWATER_FULL:
-            case TILESTONE:
-            case TILESTONE_FULL:
-            case TILEAUTUMN:
-            case TILEAUTUMN_FULL:
-            case TILELAVA:
-            case TILELAVA_FULL:
-            case TREEGREEN_MID:
-                selection.setVisible(true);
-                if(outOfBounds(selectedTile))
-                    return;
-
-                int h = Map.getTile(tiles, selectedTile.q, selectedTile.r).getHeightOfTile() - 1;
-                selection.setLayoutX(p.x);
-                selection.setLayoutY(p.y - (h > 0 ? Tile.HEX_VERTICAL_OFFSET * h : 0));
-                break;
-
-
-
-
+            int h = Map.getTile(tiles, selectedTile.q, selectedTile.r).getHeightOfTile() - 1;
+            selection.setLayoutX(p.x);
+            selection.setLayoutY(p.y - (h > 0 ? Tile.HEX_VERTICAL_OFFSET * h : 0));
         }
+
     }
 
     public void leftClicked(INSTRUMENT instrument, double x, double y, boolean blocked) {
@@ -194,6 +199,9 @@ public class MapEditor {
         int r = selectedScreenTile.r;
         Point p = offsetLayout.hexToPixel(selectedScreenTile);
         Tile selectedTile = Map.getTile(tiles, q, r);
+        int heightBefore = selectedTile.getHeightOfTile() - 1;
+        ImageView iv;
+        Point treesOrigin, treesIVOrigin;
 
 
         switch (instrument) {
@@ -365,28 +373,181 @@ public class MapEditor {
             case TREEGREEN_MID:
                 selection.setVisible(true);
 
-
-
-                if (selectedTile.getType() == "empty")
+                if (selectedTile.getType().equals("empty"))
                     break;
-                ImageView iv = new ImageView(provider.getImage("treeGreen_mid"));
-                int height = Map.getTile(tiles, selectedScreenTile.q, selectedScreenTile.r).getHeightOfTile() - 1;
-                Point treesOrigin = new Point( x - iv.getImage().getWidth()/2, y - iv.getImage().getHeight() * 0.9);
+                iv = new ImageView(provider.getImage("treeGreen_mid"));
+                treesOrigin = new Point( x - iv.getImage().getWidth()/2, y - iv.getImage().getHeight() * 0.9);
 
-                Point treesIVOrigin = new Point( x - iv.getImage().getWidth()/2, y - iv.getImage().getHeight() * 0.9 - height * Tile.HEX_VERTICAL_OFFSET);
+                treesIVOrigin = new Point( x - iv.getImage().getWidth()/2, y - iv.getImage().getHeight() * 0.9 - heightBefore * Tile.HEX_VERTICAL_OFFSET);
 
                 selectedTile.pushElement("treeGreen_mid", treesOrigin);
                 Map.pushElementView(elements, iv, q, r, treesIVOrigin);
                 break;
 
+            case TREEGREEN_LOW:
+                selection.setVisible(true);
+
+                if (selectedTile.getType().equals("empty"))
+                    break;
+                iv = new ImageView(provider.getImage("treeGreen_low"));
+                treesOrigin = new Point( x - iv.getImage().getWidth()/2, y - iv.getImage().getHeight() * 0.9);
+
+                treesIVOrigin = new Point( x - iv.getImage().getWidth()/2, y - iv.getImage().getHeight() * 0.9 - heightBefore * Tile.HEX_VERTICAL_OFFSET);
+
+                selectedTile.pushElement("treeGreen_low", treesOrigin);
+                Map.pushElementView(elements, iv, q, r, treesIVOrigin);
+                break;
+
+            case TREEGREEN_HIGH:
+                selection.setVisible(true);
+
+                if (selectedTile.getType().equals("empty"))
+                    break;
+                iv = new ImageView(provider.getImage("treeGreen_high"));
+                treesOrigin = new Point( x - iv.getImage().getWidth()/2, y - iv.getImage().getHeight() * 0.9);
+
+                treesIVOrigin = new Point( x - iv.getImage().getWidth()/2, y - iv.getImage().getHeight() * 0.9 - heightBefore * Tile.HEX_VERTICAL_OFFSET);
+
+                selectedTile.pushElement("treeGreen_high", treesOrigin);
+                Map.pushElementView(elements, iv, q, r, treesIVOrigin);
+                break;
+
+            case PINEGREEN_MID:
+                selection.setVisible(true);
+
+                if (selectedTile.getType().equals("empty"))
+                    break;
+                iv = new ImageView(provider.getImage("pineGreen_mid"));
+                treesOrigin = new Point( x - iv.getImage().getWidth()/2, y - iv.getImage().getHeight() * 0.9);
+
+                treesIVOrigin = new Point( x - iv.getImage().getWidth()/2, y - iv.getImage().getHeight() * 0.9 - heightBefore * Tile.HEX_VERTICAL_OFFSET);
+
+                selectedTile.pushElement("pineGreen_mid", treesOrigin);
+                Map.pushElementView(elements, iv, q, r, treesIVOrigin);
+                break;
+
+            case PINEGREEN_LOW:
+                selection.setVisible(true);
+
+                if (selectedTile.getType().equals("empty"))
+                    break;
+                iv = new ImageView(provider.getImage("pineGreen_low"));
+                treesOrigin = new Point( x - iv.getImage().getWidth()/2, y - iv.getImage().getHeight() * 0.9);
+
+                treesIVOrigin = new Point( x - iv.getImage().getWidth()/2, y - iv.getImage().getHeight() * 0.9 - heightBefore * Tile.HEX_VERTICAL_OFFSET);
+
+                selectedTile.pushElement("pineGreen_low", treesOrigin);
+                Map.pushElementView(elements, iv, q, r, treesIVOrigin);
+                break;
+
+            case PINEGREEN_HIGH:
+                selection.setVisible(true);
+
+                if (selectedTile.getType().equals("empty"))
+                    break;
+                iv = new ImageView(provider.getImage("pineGreen_high"));
+                treesOrigin = new Point( x - iv.getImage().getWidth()/2, y - iv.getImage().getHeight() * 0.9);
+
+                treesIVOrigin = new Point( x - iv.getImage().getWidth()/2, y - iv.getImage().getHeight() * 0.9 - heightBefore * Tile.HEX_VERTICAL_OFFSET);
+
+                selectedTile.pushElement("pineGreen_high", treesOrigin);
+                Map.pushElementView(elements, iv, q, r, treesIVOrigin);
+                break;
+
+            case TREEBLUE_MID:
+                selection.setVisible(true);
+
+                if (selectedTile.getType().equals("empty"))
+                    break;
+                iv = new ImageView(provider.getImage("treeBlue_mid"));
+                treesOrigin = new Point( x - iv.getImage().getWidth()/2, y - iv.getImage().getHeight() * 0.9);
+
+                treesIVOrigin = new Point( x - iv.getImage().getWidth()/2, y - iv.getImage().getHeight() * 0.9 - heightBefore * Tile.HEX_VERTICAL_OFFSET);
+
+                selectedTile.pushElement("treeBlue_mid", treesOrigin);
+                Map.pushElementView(elements, iv, q, r, treesIVOrigin);
+                break;
+
+            case TREEBLUE_LOW:
+                selection.setVisible(true);
+
+                if (selectedTile.getType().equals("empty"))
+                    break;
+                iv = new ImageView(provider.getImage("treeBlue_low"));
+                treesOrigin = new Point( x - iv.getImage().getWidth()/2, y - iv.getImage().getHeight() * 0.9);
+
+                treesIVOrigin = new Point( x - iv.getImage().getWidth()/2, y - iv.getImage().getHeight() * 0.9 - heightBefore * Tile.HEX_VERTICAL_OFFSET);
+
+                selectedTile.pushElement("treeBlue_low", treesOrigin);
+                Map.pushElementView(elements, iv, q, r, treesIVOrigin);
+                break;
+
+            case TREEBLUE_HIGH:
+                selection.setVisible(true);
+
+                if (selectedTile.getType().equals("empty"))
+                    break;
+                iv = new ImageView(provider.getImage("treeBlue_high"));
+                treesOrigin = new Point( x - iv.getImage().getWidth()/2, y - iv.getImage().getHeight() * 0.9);
+
+                treesIVOrigin = new Point( x - iv.getImage().getWidth()/2, y - iv.getImage().getHeight() * 0.9 - heightBefore * Tile.HEX_VERTICAL_OFFSET);
+
+                selectedTile.pushElement("treeBlue_high", treesOrigin);
+                Map.pushElementView(elements, iv, q, r, treesIVOrigin);
+                break;
+
+            case PINEBLUE_MID:
+                selection.setVisible(true);
+
+                if (selectedTile.getType().equals("empty"))
+                    break;
+                iv = new ImageView(provider.getImage("pineBlue_mid"));
+                treesOrigin = new Point( x - iv.getImage().getWidth()/2, y - iv.getImage().getHeight() * 0.9);
+
+                treesIVOrigin = new Point( x - iv.getImage().getWidth()/2, y - iv.getImage().getHeight() * 0.9 - heightBefore * Tile.HEX_VERTICAL_OFFSET);
+
+                selectedTile.pushElement("pineBlue_mid", treesOrigin);
+                Map.pushElementView(elements, iv, q, r, treesIVOrigin);
+                break;
+
+            case PINEBLUE_LOW:
+                selection.setVisible(true);
+
+                if (selectedTile.getType().equals("empty"))
+                    break;
+                iv = new ImageView(provider.getImage("pineBlue_low"));
+                treesOrigin = new Point( x - iv.getImage().getWidth()/2, y - iv.getImage().getHeight() * 0.9);
+
+                treesIVOrigin = new Point( x - iv.getImage().getWidth()/2, y - iv.getImage().getHeight() * 0.9 - heightBefore * Tile.HEX_VERTICAL_OFFSET);
+
+                selectedTile.pushElement("pineBlue_low", treesOrigin);
+                Map.pushElementView(elements, iv, q, r, treesIVOrigin);
+                break;
+
+            case PINEBLUE_HIGH:
+                selection.setVisible(true);
+
+                if (selectedTile.getType().equals("empty"))
+                    break;
+                iv = new ImageView(provider.getImage("pineBlue_high"));
+                treesOrigin = new Point( x - iv.getImage().getWidth()/2, y - iv.getImage().getHeight() * 0.9);
+
+                treesIVOrigin = new Point( x - iv.getImage().getWidth()/2, y - iv.getImage().getHeight() * 0.9 - heightBefore * Tile.HEX_VERTICAL_OFFSET);
+
+                selectedTile.pushElement("pineBlue_high", treesOrigin);
+                Map.pushElementView(elements, iv, q, r, treesIVOrigin);
+                break;
+
+
+
         }
-        int h = Map.getTile(tiles, selectedScreenTile.q, selectedScreenTile.r).getHeightOfTile() - 1;
+        int heightAfter = Map.getTile(tiles, selectedScreenTile.q, selectedScreenTile.r).getHeightOfTile() - 1;
         selection.setLayoutX(p.x);
-        selection.setLayoutY(p.y - (h > 0 ? Tile.HEX_VERTICAL_OFFSET * h : 0));
+        selection.setLayoutY(p.y - (heightAfter > 0 ? Tile.HEX_VERTICAL_OFFSET * heightAfter : 0));
 
     }
 
-    public void rightClicked(INSTRUMENT instrument, double x, double y, boolean blocked) {
+    public void rightClicked(double x, double y, boolean blocked) {
         selection.setVisible(true);
         if (blocked)
             return;

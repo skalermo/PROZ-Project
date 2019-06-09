@@ -205,7 +205,7 @@ public class MapEditorViewManager {
                 if (mouseEvent.getButton() == MouseButton.PRIMARY)
                     editor.leftClicked(instrumentPanel.getCurrentInstrumentStyle(), mouseEvent.getSceneX(), mouseEvent.getSceneY(), isDrawingBlocked);
                 if (mouseEvent.getButton() == MouseButton.SECONDARY)
-                    editor.rightClicked(instrumentPanel.getCurrentInstrumentStyle(), mouseEvent.getSceneX(), mouseEvent.getSceneY(), isDrawingBlocked);
+                    editor.rightClicked(mouseEvent.getSceneX(), mouseEvent.getSceneY(), isDrawingBlocked);
             }
         });
 
@@ -269,25 +269,11 @@ public class MapEditorViewManager {
     private void createSelectTool() {
         ExpandableInstrumentButton select = new ExpandableInstrumentButton(INSTRUMENT.SELECT, null, instrumentPanel);
         instrumentPanel.addInstrument(select);
-
-//        select.getCurrentInstrument().setOnMouseClicked(new EventHandler<MouseEvent>() {
-//            @Override
-//            public void handle(MouseEvent mouseEvent) {
-//                instrumentPanel.setSelectedInstrument(select.getCurrentInstrumentStyle());
-//            }
-//        });
     }
 
     private void createEraserTool() {
         ExpandableInstrumentButton eraser = new ExpandableInstrumentButton(INSTRUMENT.ERASER, null, instrumentPanel);
         instrumentPanel.addInstrument(eraser);
-
-//        eraser.getCurrentInstrument().setOnMouseClicked(new EventHandler<MouseEvent>() {
-//            @Override
-//            public void handle(MouseEvent mouseEvent) {
-//                instrumentPanel.setSelectedInstrument(eraser.getCurrentInstrumentStyle());
-//            }
-//        });
     }
 
     private void createTileTool() {
@@ -312,13 +298,6 @@ public class MapEditorViewManager {
         tile.addRelated(new InstrumentButton(INSTRUMENT.TILELAVA, instrumentPanel, tile));
         tile.addRelated(new InstrumentButton(INSTRUMENT.TILELAVA_FULL, instrumentPanel, tile));
 
-
-//        tile.getCurrentInstrument().setOnMouseClicked(new EventHandler<MouseEvent>() {
-//            @Override
-//            public void handle(MouseEvent mouseEvent) {
-//                instrumentPanel.setSelectedInstrument(tile.getCurrentInstrumentStyle());
-//            }
-//        });
     }
 
     private void createTreesTool() {
@@ -327,6 +306,18 @@ public class MapEditorViewManager {
         instrumentPanel.addInstrument(tree);
         treesPane.setLayoutX(instrumentPanel.getLayoutX());
         treesPane.setLayoutY(instrumentPanel.getLayoutY());
+        tree.addRelated(new InstrumentButton(INSTRUMENT.TREEGREEN_MID, instrumentPanel, tree));
+        tree.addRelated(new InstrumentButton(INSTRUMENT.TREEGREEN_LOW, instrumentPanel, tree));
+        tree.addRelated(new InstrumentButton(INSTRUMENT.TREEGREEN_HIGH, instrumentPanel, tree));
+        tree.addRelated(new InstrumentButton(INSTRUMENT.PINEGREEN_MID, instrumentPanel, tree));
+        tree.addRelated(new InstrumentButton(INSTRUMENT.PINEGREEN_LOW, instrumentPanel, tree));
+        tree.addRelated(new InstrumentButton(INSTRUMENT.PINEGREEN_HIGH, instrumentPanel, tree));
+        tree.addRelated(new InstrumentButton(INSTRUMENT.TREEBLUE_MID, instrumentPanel, tree));
+        tree.addRelated(new InstrumentButton(INSTRUMENT.TREEBLUE_LOW, instrumentPanel, tree));
+        tree.addRelated(new InstrumentButton(INSTRUMENT.TREEBLUE_HIGH, instrumentPanel, tree));
+        tree.addRelated(new InstrumentButton(INSTRUMENT.PINEBLUE_MID, instrumentPanel, tree));
+        tree.addRelated(new InstrumentButton(INSTRUMENT.PINEBLUE_LOW, instrumentPanel, tree));
+        tree.addRelated(new InstrumentButton(INSTRUMENT.PINEBLUE_HIGH, instrumentPanel, tree));
 
     }
 

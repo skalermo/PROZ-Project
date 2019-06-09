@@ -49,7 +49,7 @@ public class ExpandableInstrumentButton {
             return;
 
         paneWithInstruments.setPrefWidth((instrumentButton.getMinWidth() + instrumentPanel.getSpacing()) * 3);
-        paneWithInstruments.setTranslateX(instrumentPanel.getPrefWidth() + instrumentPanel.getSpacing());
+        paneWithInstruments.setTranslateX(instrumentPanel.getPrefWidth() + 2*instrumentPanel.getSpacing());
         paneWithInstruments.setTranslateY(layoutY - instrumentButton.getMinHeight() - instrumentPanel.getSpacing());
     }
 

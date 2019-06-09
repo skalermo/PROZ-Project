@@ -37,6 +37,28 @@ public enum INSTRUMENT {
 
     TREEGREEN_MID("/view/resources/Tiles/treeGreen_mid.png"),
 
+    TREEGREEN_LOW("/view/resources/Tiles/treeGreen_low.png"),
+
+    TREEGREEN_HIGH("/view/resources/Tiles/treeGreen_high.png"),
+
+    TREEBLUE_LOW("/view/resources/Tiles/treeBlue_low.png"),
+
+    TREEBLUE_MID("/view/resources/Tiles/treeBlue_mid.png"),
+
+    TREEBLUE_HIGH("/view/resources/Tiles/treeBlue_high.png"),
+
+    PINEGREEN_MID("/view/resources/Tiles/pineGreen_mid.png"),
+
+    PINEGREEN_LOW("/view/resources/Tiles/pineGreen_low.png"),
+
+    PINEGREEN_HIGH("/view/resources/Tiles/pineGreen_high.png"),
+
+    PINEBLUE_LOW("/view/resources/Tiles/pineBlue_low.png"),
+
+    PINEBLUE_MID("/view/resources/Tiles/pineBlue_mid.png"),
+
+    PINEBLUE_HIGH("/view/resources/Tiles/pineBlue_high.png"),
+
 
     ERASER("model/resources/Editing-Eraser-icon-small.png");
 

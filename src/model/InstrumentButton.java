@@ -3,9 +3,8 @@ package model;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
-
-import static model.INSTRUMENT.TREEGREEN_MID;
 
 public class InstrumentButton extends Button {
 
@@ -66,8 +65,9 @@ public class InstrumentButton extends Button {
 
 
     private void createBackgroundStyle(INSTRUMENT instrument) {
-        if (instrument == TREEGREEN_MID)
-            setMinSize(35, 110);
+        Image im = new Image(instrument.getUrlInstrument());
+
+        setMinSize(im.getWidth(), im.getHeight());
 
         setStyle("-fx-background-image: url('" + instrument.getUrlInstrument() + "');" +
                 "-fx-background-size: " + this.getMinWidth() + " " + this.getMinHeight());
