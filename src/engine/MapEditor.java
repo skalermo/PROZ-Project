@@ -150,32 +150,6 @@ public class MapEditor {
         if (instrument == INSTRUMENT.NONE)
             return;
 
-        if (instrument == INSTRUMENT.SELECT ||
-                instrument == INSTRUMENT.ERASER ||
-                instrument == INSTRUMENT.TILEGRASS ||
-                instrument == INSTRUMENT.TILEGRASS_FULL ||
-                instrument == INSTRUMENT.TILEMAGIC ||
-                instrument == INSTRUMENT.TILEMAGIC_FULL ||
-                instrument == INSTRUMENT.TILEDIRT ||
-                instrument == INSTRUMENT.TILEDIRT_FULL ||
-                instrument == INSTRUMENT.TILEWATER ||
-                instrument == INSTRUMENT.TILEWATER_FULL ||
-                instrument == INSTRUMENT.TILESTONE ||
-                instrument == INSTRUMENT.TILESTONE_FULL ||
-                instrument == INSTRUMENT.TILEAUTUMN ||
-                instrument == INSTRUMENT.TILEAUTUMN_FULL ||
-                instrument == INSTRUMENT.TREEGREEN_MID ||
-                instrument == INSTRUMENT.TREEGREEN_LOW ||
-                instrument == INSTRUMENT.TREEGREEN_HIGH ||
-                instrument == INSTRUMENT.PINEGREEN_MID ||
-                instrument == INSTRUMENT.PINEGREEN_LOW ||
-                instrument == INSTRUMENT.PINEGREEN_HIGH ||
-                instrument == INSTRUMENT.TREEBLUE_MID ||
-                instrument == INSTRUMENT.TREEBLUE_LOW ||
-                instrument == INSTRUMENT.TREEBLUE_HIGH ||
-                instrument == INSTRUMENT.PINEBLUE_MID ||
-                instrument == INSTRUMENT.PINEBLUE_LOW ||
-                instrument == INSTRUMENT.PINEBLUE_HIGH) {
 
             selection.setVisible(true);
             if (outOfBounds(selectedTile))
@@ -184,7 +158,6 @@ public class MapEditor {
             int h = Map.getTile(tiles, selectedTile.q, selectedTile.r).getHeightOfTile() - 1;
             selection.setLayoutX(p.x);
             selection.setLayoutY(p.y - (h > 0 ? Tile.HEX_VERTICAL_OFFSET * h : 0));
-        }
 
     }
 
@@ -247,6 +220,8 @@ public class MapEditor {
 
                 selectedTile.pushTile("tileGrass_full");
                 Map.getImageView(imageViews, q, r, selectedTile.getHeightOfTile() - 1).setImage(provider.getImage("tileGrass_full"));selection.setLayoutX(p.x);
+                for (int i = 0; i < selectedTile.getElementsAmount(); i++)
+                    Map.getImageView(elements, q, r, i).setLayoutY(selectedTile.getElementsCoords().get(i).y - (selectedTile.getHeightOfTile()-1) * Tile.HEX_VERTICAL_OFFSET);
 
                 break;
 //
@@ -257,6 +232,9 @@ public class MapEditor {
 
                 selectedTile.pushTile("tileMagic");
                 Map.getImageView(imageViews, q, r, selectedTile.getHeightOfTile() - 1).setImage(provider.getImage("tileMagic"));selection.setLayoutX(p.x);
+                for (int i = 0; i < selectedTile.getElementsAmount(); i++)
+                    Map.getImageView(elements, q, r, i).setLayoutY(selectedTile.getElementsCoords().get(i).y - (selectedTile.getHeightOfTile()-1) * Tile.HEX_VERTICAL_OFFSET);
+
 
                 break;
 //
@@ -267,6 +245,8 @@ public class MapEditor {
 
                 selectedTile.pushTile("tileMagic_full");
                 Map.getImageView(imageViews, q, r, selectedTile.getHeightOfTile() - 1).setImage(provider.getImage("tileMagic_full"));selection.setLayoutX(p.x);
+                for (int i = 0; i < selectedTile.getElementsAmount(); i++)
+                    Map.getImageView(elements, q, r, i).setLayoutY(selectedTile.getElementsCoords().get(i).y - (selectedTile.getHeightOfTile()-1) * Tile.HEX_VERTICAL_OFFSET);
 
 
                 break;
@@ -277,7 +257,8 @@ public class MapEditor {
 
                 selectedTile.pushTile("tileDirt");
                 Map.getImageView(imageViews, q, r, selectedTile.getHeightOfTile() - 1).setImage(provider.getImage("tileDirt"));selection.setLayoutX(p.x);
-
+                for (int i = 0; i < selectedTile.getElementsAmount(); i++)
+                    Map.getImageView(elements, q, r, i).setLayoutY(selectedTile.getElementsCoords().get(i).y - (selectedTile.getHeightOfTile()-1) * Tile.HEX_VERTICAL_OFFSET);
                 break;
 
             case TILEDIRT_FULL:
@@ -287,7 +268,30 @@ public class MapEditor {
 
                 selectedTile.pushTile("tileDirt_full");
                 Map.getImageView(imageViews, q, r, selectedTile.getHeightOfTile() - 1).setImage(provider.getImage("tileDirt_full"));selection.setLayoutX(p.x);
+                for (int i = 0; i < selectedTile.getElementsAmount(); i++)
+                    Map.getImageView(elements, q, r, i).setLayoutY(selectedTile.getElementsCoords().get(i).y - (selectedTile.getHeightOfTile()-1) * Tile.HEX_VERTICAL_OFFSET);
+                break;
 
+            case TILESAND:
+                selection.setVisible(true);
+
+
+
+                selectedTile.pushTile("tileSand");
+                Map.getImageView(imageViews, q, r, selectedTile.getHeightOfTile() - 1).setImage(provider.getImage("tileSand"));selection.setLayoutX(p.x);
+                for (int i = 0; i < selectedTile.getElementsAmount(); i++)
+                    Map.getImageView(elements, q, r, i).setLayoutY(selectedTile.getElementsCoords().get(i).y - (selectedTile.getHeightOfTile()-1) * Tile.HEX_VERTICAL_OFFSET);
+                break;
+
+            case TILESAND_FULL:
+                selection.setVisible(true);
+
+
+
+                selectedTile.pushTile("tileSand_full");
+                Map.getImageView(imageViews, q, r, selectedTile.getHeightOfTile() - 1).setImage(provider.getImage("tileSand_full"));selection.setLayoutX(p.x);
+                for (int i = 0; i < selectedTile.getElementsAmount(); i++)
+                    Map.getImageView(elements, q, r, i).setLayoutY(selectedTile.getElementsCoords().get(i).y - (selectedTile.getHeightOfTile()-1) * Tile.HEX_VERTICAL_OFFSET);
                 break;
 
             case TILEWATER:
@@ -297,7 +301,8 @@ public class MapEditor {
 
                 selectedTile.pushTile("tileWater");
                 Map.getImageView(imageViews, q, r, selectedTile.getHeightOfTile() - 1).setImage(provider.getImage("tileWater"));selection.setLayoutX(p.x);
-
+                for (int i = 0; i < selectedTile.getElementsAmount(); i++)
+                    Map.getImageView(elements, q, r, i).setLayoutY(selectedTile.getElementsCoords().get(i).y - (selectedTile.getHeightOfTile()-1) * Tile.HEX_VERTICAL_OFFSET);
                 break;
 
             case TILEWATER_FULL:
@@ -307,7 +312,8 @@ public class MapEditor {
 
                 selectedTile.pushTile("tileWater_full");
                 Map.getImageView(imageViews, q, r, selectedTile.getHeightOfTile() - 1).setImage(provider.getImage("tileWater_full"));selection.setLayoutX(p.x);
-
+                for (int i = 0; i < selectedTile.getElementsAmount(); i++)
+                    Map.getImageView(elements, q, r, i).setLayoutY(selectedTile.getElementsCoords().get(i).y - (selectedTile.getHeightOfTile()-1) * Tile.HEX_VERTICAL_OFFSET);
                 break;
 
             case TILESTONE:
@@ -317,7 +323,8 @@ public class MapEditor {
 
                 selectedTile.pushTile("tileStone");
                 Map.getImageView(imageViews, q, r, selectedTile.getHeightOfTile() - 1).setImage(provider.getImage("tileStone"));selection.setLayoutX(p.x);
-
+                for (int i = 0; i < selectedTile.getElementsAmount(); i++)
+                    Map.getImageView(elements, q, r, i).setLayoutY(selectedTile.getElementsCoords().get(i).y - (selectedTile.getHeightOfTile()-1) * Tile.HEX_VERTICAL_OFFSET);
                 break;
 
             case TILESTONE_FULL:
@@ -327,7 +334,8 @@ public class MapEditor {
 
                 selectedTile.pushTile("tileStone_full");
                 Map.getImageView(imageViews, q, r, selectedTile.getHeightOfTile() - 1).setImage(provider.getImage("tileStone_full"));selection.setLayoutX(p.x);
-
+                for (int i = 0; i < selectedTile.getElementsAmount(); i++)
+                    Map.getImageView(elements, q, r, i).setLayoutY(selectedTile.getElementsCoords().get(i).y - (selectedTile.getHeightOfTile()-1) * Tile.HEX_VERTICAL_OFFSET);
                 break;
 
             case TILEAUTUMN:
@@ -337,7 +345,8 @@ public class MapEditor {
 
                 selectedTile.pushTile("tileAutumn");
                 Map.getImageView(imageViews, q, r, selectedTile.getHeightOfTile() - 1).setImage(provider.getImage("tileAutumn"));selection.setLayoutX(p.x);
-
+                for (int i = 0; i < selectedTile.getElementsAmount(); i++)
+                    Map.getImageView(elements, q, r, i).setLayoutY(selectedTile.getElementsCoords().get(i).y - (selectedTile.getHeightOfTile()-1) * Tile.HEX_VERTICAL_OFFSET);
                 break;
 
             case TILEAUTUMN_FULL:
@@ -347,7 +356,8 @@ public class MapEditor {
 
                 selectedTile.pushTile("tileAutumn_full");
                 Map.getImageView(imageViews, q, r, selectedTile.getHeightOfTile() - 1).setImage(provider.getImage("tileAutumn_full"));selection.setLayoutX(p.x);
-
+                for (int i = 0; i < selectedTile.getElementsAmount(); i++)
+                    Map.getImageView(elements, q, r, i).setLayoutY(selectedTile.getElementsCoords().get(i).y - (selectedTile.getHeightOfTile()-1) * Tile.HEX_VERTICAL_OFFSET);
                 break;
 
             case TILELAVA:
@@ -357,7 +367,8 @@ public class MapEditor {
 
                 selectedTile.pushTile("tileLava");
                 Map.getImageView(imageViews, q, r, selectedTile.getHeightOfTile() - 1).setImage(provider.getImage("tileLava"));selection.setLayoutX(p.x);
-
+                for (int i = 0; i < selectedTile.getElementsAmount(); i++)
+                    Map.getImageView(elements, q, r, i).setLayoutY(selectedTile.getElementsCoords().get(i).y - (selectedTile.getHeightOfTile()-1) * Tile.HEX_VERTICAL_OFFSET);
                 break;
 
             case TILELAVA_FULL:
@@ -367,7 +378,30 @@ public class MapEditor {
                 selectedTile.pushTile("tileLava_full");
                 Map.getImageView(imageViews, q, r, selectedTile.getHeightOfTile() - 1).setImage(provider.getImage("tileLava_full"));
                 selection.setLayoutX(p.x);
+                for (int i = 0; i < selectedTile.getElementsAmount(); i++)
+                    Map.getImageView(elements, q, r, i).setLayoutY(selectedTile.getElementsCoords().get(i).y - (selectedTile.getHeightOfTile()-1) * Tile.HEX_VERTICAL_OFFSET);
+                break;
 
+            case TILESNOW:
+                selection.setVisible(true);
+
+
+                selectedTile.pushTile("tileSnow");
+                Map.getImageView(imageViews, q, r, selectedTile.getHeightOfTile() - 1).setImage(provider.getImage("tileSnow"));
+                selection.setLayoutX(p.x);
+                for (int i = 0; i < selectedTile.getElementsAmount(); i++)
+                    Map.getImageView(elements, q, r, i).setLayoutY(selectedTile.getElementsCoords().get(i).y - (selectedTile.getHeightOfTile()-1) * Tile.HEX_VERTICAL_OFFSET);
+                break;
+
+            case TILESNOW_FULL:
+                selection.setVisible(true);
+
+
+                selectedTile.pushTile("tileSnow_full");
+                Map.getImageView(imageViews, q, r, selectedTile.getHeightOfTile() - 1).setImage(provider.getImage("tileSnow_full"));
+                selection.setLayoutX(p.x);
+                for (int i = 0; i < selectedTile.getElementsAmount(); i++)
+                    Map.getImageView(elements, q, r, i).setLayoutY(selectedTile.getElementsCoords().get(i).y - (selectedTile.getHeightOfTile()-1) * Tile.HEX_VERTICAL_OFFSET);
                 break;
 
             case TREEGREEN_MID:

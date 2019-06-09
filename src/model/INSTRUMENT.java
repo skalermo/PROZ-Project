@@ -17,6 +17,10 @@ public enum INSTRUMENT {
 
     TILEDIRT_FULL("/view/resources/Tiles/tileDirt_full.png"),
 
+    TILESAND("/view/resources/Tiles/tileSand.png"),
+
+    TILESAND_FULL("/view/resources/Tiles/tileSand_full.png"),
+
     TILEWATER("/view/resources/Tiles/tileWater.png"),
 
     TILEWATER_FULL("/view/resources/Tiles/tileWater_full.png"),
@@ -32,6 +36,10 @@ public enum INSTRUMENT {
     TILELAVA("/view/resources/Tiles/tileLava.png"),
 
     TILELAVA_FULL("/view/resources/Tiles/tileLava_full.png"),
+
+    TILESNOW("/view/resources/Tiles/tileSnow.png"),
+
+    TILESNOW_FULL("/view/resources/Tiles/tileSnow_full.png"),
 
 
 

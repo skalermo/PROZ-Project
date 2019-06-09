@@ -290,6 +290,8 @@ public class MapEditorViewManager {
         tile.addRelated(new InstrumentButton(INSTRUMENT.TILEMAGIC_FULL, instrumentPanel, tile));
         tile.addRelated(new InstrumentButton(INSTRUMENT.TILEDIRT, instrumentPanel, tile));
         tile.addRelated(new InstrumentButton(INSTRUMENT.TILEDIRT_FULL, instrumentPanel, tile));
+        tile.addRelated(new InstrumentButton(INSTRUMENT.TILESAND, instrumentPanel, tile));
+        tile.addRelated(new InstrumentButton(INSTRUMENT.TILESAND_FULL, instrumentPanel, tile));
         tile.addRelated(new InstrumentButton(INSTRUMENT.TILEWATER, instrumentPanel, tile));
         tile.addRelated(new InstrumentButton(INSTRUMENT.TILEWATER_FULL, instrumentPanel, tile));
         tile.addRelated(new InstrumentButton(INSTRUMENT.TILESTONE, instrumentPanel, tile));
@@ -298,7 +300,8 @@ public class MapEditorViewManager {
         tile.addRelated(new InstrumentButton(INSTRUMENT.TILEAUTUMN_FULL, instrumentPanel, tile));
         tile.addRelated(new InstrumentButton(INSTRUMENT.TILELAVA, instrumentPanel, tile));
         tile.addRelated(new InstrumentButton(INSTRUMENT.TILELAVA_FULL, instrumentPanel, tile));
-
+        tile.addRelated(new InstrumentButton(INSTRUMENT.TILESNOW, instrumentPanel, tile));
+        tile.addRelated(new InstrumentButton(INSTRUMENT.TILESNOW_FULL, instrumentPanel, tile));
     }
 
     private void createTreesTool() {
