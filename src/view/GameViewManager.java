@@ -15,8 +15,6 @@ import javafx.stage.Stage;
 import model.GameMenuSubScene;
 import model.InfoLabel;
 import model.MenuButton;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +43,6 @@ public class GameViewManager {
 
     private AnimationTimer gameTimer;
 
-    private static Logger log = LogManager.getRootLogger();
 
     public GameViewManager(){
 

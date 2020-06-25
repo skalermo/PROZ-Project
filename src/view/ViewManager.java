@@ -10,8 +10,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import model.*;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +18,6 @@ import java.util.List;
 
 public class ViewManager {
 
-    private static Logger log = LogManager.getRootLogger();
 
     private AnchorPane mainPane;
     private Scene startMenuScene;

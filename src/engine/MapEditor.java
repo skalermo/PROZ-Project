@@ -1,6 +1,5 @@
 package engine;
 
-import application.Logger;
 import javafx.scene.image.ImageView;
 import model.INSTRUMENT;
 import view.ImageProvider;
@@ -185,8 +184,6 @@ public class MapEditor {
                 selection.setVisible(true);
 
 
-
-                Logger.info(""+selectedTile.getHeightOfTile());
                 selectedTile.popTile();
                 Map.getImageView(imageViews, q, r, selectedTile.getHeightOfTile()).setImage(provider.getImage("empty"));
                 if (selectedTile.getType().equals("empty")) {
@@ -197,7 +194,6 @@ public class MapEditor {
                 else
                     for (int i = 0; i < selectedTile.getElementsAmount(); i++)
                         Map.getImageView(elements, q, r, i).setLayoutY(selectedTile.getElementsCoords().get(i).y - (selectedTile.getHeightOfTile()-1) * Tile.HEX_VERTICAL_OFFSET);
-                Logger.info(""+selectedTile.getHeightOfTile());
 
                 break;
 
@@ -745,7 +741,6 @@ public class MapEditor {
         int q = selectedScreenTile.q;
         int r = selectedScreenTile.r;
         Tile selectedTile = Map.getTile(tiles, q, r);
-        Logger.info("rc. "+selectedTile.getHeightOfTile());
 
         if (selectedTile.getElementsAmount() == 0) {
             selectedTile.popTile();
@@ -759,7 +754,6 @@ public class MapEditor {
         int h = Map.getTile(tiles, selectedTile.q, selectedTile.r).getHeightOfTile() - 1;
         selection.setLayoutX(p.x);
         selection.setLayoutY(p.y - (h > 0 ? Tile.HEX_VERTICAL_OFFSET * h : 0));
-        Logger.info("rc.. "+selectedTile.getHeightOfTile());
 
     }
 
